@@ -1,0 +1,12 @@
+server:
+  port: 15447
+shiro:
+  plugin-list:
+spring:
+  datasource:
+    url: jdbc:sqlite:SPDNetData.db
+    driver-class-name: org.sqlite.JDBC
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.community.dialect.SQLiteDialect
