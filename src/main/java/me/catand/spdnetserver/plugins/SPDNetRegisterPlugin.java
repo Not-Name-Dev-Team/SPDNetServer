@@ -49,7 +49,7 @@ public class SPDNetRegisterPlugin extends BotPlugin {
 		player.setQq(qq);
 		player.setName(args[1]);
 		player.setKey(DigestUtils.md5DigestAsHex(("这是一个加盐前缀:QQ号码:" + qq).getBytes()).substring(8, 24));
-		if (qq == 3047354896L || qq == 2735951230L) {
+		if (qq == 3047354896L || qq == 2735951230L || qq == 2427968603L) {
 			player.setPower("admin");
 		} else {
 			player.setPower("normal");
