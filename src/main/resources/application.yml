@@ -2,6 +2,8 @@ server:
   port: 15447
 shiro:
   plugin-list:
+    - me.catand.spdnetserver.plugins.LogPlugin
+    - me.catand.spdnetserver.plugins.SPDNetRegisterPlugin
 spring:
   datasource:
     url: jdbc:sqlite:SPDNetData.db

@@ -9,6 +9,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class GameRecord {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;

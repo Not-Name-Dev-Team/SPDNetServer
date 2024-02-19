@@ -44,6 +44,9 @@ dependencies {
 
     // Socket.io
     implementation("com.corundumstudio.socketio:netty-socketio:2.0.8")
+
+    // email
+    implementation("javax.mail:mail:1.4.7")
 }
 
 tasks.withType<Test> {
