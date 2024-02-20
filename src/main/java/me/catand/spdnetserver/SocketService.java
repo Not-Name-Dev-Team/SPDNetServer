@@ -1,31 +1,45 @@
 package me.catand.spdnetserver;
 
-import com.alibaba.fastjson2.JSONArray;
-import com.alibaba.fastjson2.JSONObject;
 import com.corundumstudio.socketio.Configuration;
 import com.corundumstudio.socketio.HandshakeData;
 import com.corundumstudio.socketio.SocketIOServer;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
+import me.catand.spdnetserver.data.actions.*;
 import me.catand.spdnetserver.entitys.Player;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
+@Slf4j
 @Getter
 @Service
 public class SocketService {
+	private static SocketService instance;
 	@Autowired
 	private PlayerRepository playerRepository;
 	@Autowired
 	private SpdProperties spdProperties;
 	private SocketIOServer server;
-	private Map<String, Player> playerMap = new HashMap<>();
-	Logger logger;
+	private Map<UUID, Player> playerMap = new HashMap<>();
+	private Sender sender;
+	private Handler handler;
+
+	public static SocketService getInstance() {
+		if (instance == null) {
+			synchronized (SocketService.class) {
+				if (instance == null) {
+					instance = new SocketService();
+				}
+			}
+		}
+		return instance;
+	}
 
 	@PostConstruct
 	public void init() {
@@ -35,7 +49,9 @@ public class SocketService {
 
 		server = new SocketIOServer(config);
 		server.start();
-		startAll(server);
+		startAll();
+		sender = new Sender(server);
+		handler = new Handler(playerRepository, this, sender);
 	}
 
 	@PreDestroy
@@ -43,7 +59,10 @@ public class SocketService {
 		server.stop();
 	}
 
-	private void startAll(SocketIOServer server) {
+	/**
+	 * 启动所有事件
+	 */
+	private void startAll() {
 		server.addConnectListener(client -> {
 			HandshakeData handshakeData = client.getHandshakeData();
 			String authToken = handshakeData.getSingleUrlParam("token");
@@ -51,65 +70,57 @@ public class SocketService {
 			String netVersion = handshakeData.getSingleUrlParam("NetVersion");
 			if (authToken == null || !playerRepository.existsByKey(authToken)) {
 				client.sendEvent(Events.ERROR.getName(), "Key无效");
+				log.info(client.getSessionId() + "连接失败: Key无效, " + authToken);
 				client.disconnect();
 			} else if (!spdProperties.getVersion().equals(spdVersion) || !spdProperties.getNetVersion().equals(netVersion)) {
 				client.sendEvent(Events.ERROR.getName(), "版本不匹配");
+				log.info(client.getSessionId() + "连接失败: 版本不匹配, SPDVersion: " + spdVersion + ", NetVersion: " + netVersion);
 				client.disconnect();
 			} else {
 				Player player = playerRepository.findByKey(authToken);
-				playerMap.put(client.getSessionId().toString(), player);
-				// TODO 给其他客户端发送上线消息
-				logger.info("玩家已连接: " + player.getName());
+				playerMap.put(client.getSessionId(), player);
+				sender.sendBroadcastJoin(player.getName(), player.getPower());
+				log.info("玩家已连接: " + player.getName() + ", " + client.getSessionId());
 			}
 		});
 		server.addDisconnectListener(client -> {
-			Player player = playerMap.get(client.getSessionId().toString());
-			playerMap.remove(client.getSessionId().toString());
-			// TODO 给其他客户端发送下线消息
-			logger.info("玩家已断开连接: " + player.getName());
+			Player player = playerMap.get(client.getSessionId());
+			playerMap.remove(client.getSessionId());
+			sender.sendBroadcastExit(player.getName());
+			log.info("玩家已断开连接: " + player.getName(), client.getSessionId());
 		});
-		server.addEventListener(Actions.ACHIEVEMENT.getName(), JSONArray.class, (client, data, ackSender) -> {
-			String achievement = data.getFirst().toString();
-			boolean unique = (boolean) data.get(1);
-			Handler.handleAchievement(achievement, unique);
+		server.addEventListener(Actions.ACHIEVEMENT.getName(), CAchievement.class, (client, data, ackSender) -> {
+			handler.handleAchievement(playerMap.get(client.getSessionId()), data);
 		});
-		server.addEventListener(Actions.BACKPACK.getName(), JSONObject.class, (client, belongings, ackSender) -> {
-			Handler.handleBackpack(belongings);
+		server.addEventListener(Actions.BACKPACK.getName(), CBackpack.class, (client, data, ackSender) -> {
+			handler.handleBackpack(playerMap.get(client.getSessionId()), data);
 		});
-		server.addEventListener(Actions.CHAT_MESSAGE.getName(), String.class, (client, message, ackSender) -> {
-			Handler.handleChatMessage(message);
+		server.addEventListener(Actions.CHAT_MESSAGE.getName(), CChatMessage.class, (client, data, ackSender) -> {
+			handler.handleChatMessage(playerMap.get(client.getSessionId()), data);
 		});
-		server.addEventListener(Actions.DEATH.getName(), String.class, (client, cause, ackSender) -> {
-			Handler.handleDeath(cause);
+		server.addEventListener(Actions.DEATH.getName(), CDeath.class, (client, data, ackSender) -> {
+			handler.handleDeath(playerMap.get(client.getSessionId()), data);
 		});
-		server.addEventListener(Actions.ENTER_DUNGEON.getName(), JSONObject.class, (client, status, ackSender) -> {
-			Handler.handleEnterDungeon(status);
+		server.addEventListener(Actions.ENTER_DUNGEON.getName(), CEnterDungeon.class, (client, data, ackSender) -> {
+			handler.handleEnterDungeon(playerMap.get(client.getSessionId()), data);
 		});
-		server.addEventListener(Actions.ERROR.getName(), String.class, (client, message, ackSender) -> {
-			Handler.handleError(message);
+		server.addEventListener(Actions.ERROR.getName(), CError.class, (client, data, ackSender) -> {
+			handler.handleError(data);
 		});
-		server.addEventListener(Actions.GIVE_ITEM.getName(), JSONObject.class, (client, item, ackSender) -> {
-			Handler.handleGiveItem(item);
+		server.addEventListener(Actions.GIVE_ITEM.getName(), CGiveItem.class, (client, data, ackSender) -> {
+			handler.handleGiveItem(playerMap.get(client.getSessionId()), data);
 		});
-		server.addEventListener(Actions.FLOATING_TEXT.getName(), JSONArray.class, (client, data, ackSender) -> {
-			int type = (int) data.get(0);
-			String text = data.get(1).toString();
-			Handler.handleFloatingText(type, text);
+		server.addEventListener(Actions.FLOATING_TEXT.getName(), CFloatingText.class, (client, data, ackSender) -> {
+			handler.handleFloatingText(playerMap.get(client.getSessionId()), data);
 		});
-		server.addEventListener(Actions.LEAVE_DUNGEON.getName(), Void.class, (client, data, ackSender) -> {
-			Handler.handleLeaveDungeon();
+		server.addEventListener(Actions.LEAVE_DUNGEON.getName(), CLeaveDungeon.class, (client, data, ackSender) -> {
+			handler.handleLeaveDungeon(playerMap.get(client.getSessionId()));
 		});
-		server.addEventListener(Actions.PLAYER_MOVE.getName(), JSONArray.class, (client, data, ackSender) -> {
-			int depth = (int) data.get(0);
-			int pos = (int) data.get(1);
-			Handler.handlePlayerMove(depth, pos);
+		server.addEventListener(Actions.PLAYER_MOVE.getName(), CPlayerMove.class, (client, data, ackSender) -> {
+			handler.handlePlayerMove(playerMap.get(client.getSessionId()), data);
 		});
-		server.addEventListener(Actions.WIN.getName(), JSONObject.class, (client, record, ackSender) -> {
-			Handler.handleWin(record);
+		server.addEventListener(Actions.WIN.getName(), CWin.class, (client, data, ackSender) -> {
+			handler.handleWin(playerMap.get(client.getSessionId()), data);
 		});
-	}
-
-	public void sendEvent(String event, Object data) {
-		server.getBroadcastOperations().sendEvent(event, data);
 	}
 }

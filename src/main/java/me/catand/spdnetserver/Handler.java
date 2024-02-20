@@ -1,44 +1,56 @@
 package me.catand.spdnetserver;
 
-import com.alibaba.fastjson2.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import lombok.extern.slf4j.Slf4j;
+import me.catand.spdnetserver.data.actions.*;
+import me.catand.spdnetserver.data.events.SChatMessage;
+import me.catand.spdnetserver.entitys.Player;
 
-@Component
+@Slf4j
 public class Handler {
-	@Autowired
 	private PlayerRepository playerRepository;
+	private SocketService socketService;
+	private Sender sender;
 
-	public static void handleAchievement(String achievement, boolean unique) {
+	public Handler(PlayerRepository playerRepository, SocketService socketService, Sender sender) {
+		this.playerRepository = playerRepository;
+		this.socketService = socketService;
+		this.sender = sender;
 	}
 
-	public static void handleBackpack(JSONObject belongings) {
+	public void handleAchievement(Player player, CAchievement cAchievement) {
 	}
 
-	public static void handleChatMessage(String message) {
+	public void handleBackpack(Player player, CBackpack cBackpack) {
 	}
 
-	public static void handleDeath(String cause) {
+	public void handleChatMessage(Player player, CChatMessage cChatMessage) {
+		log.info("玩家{}发送了消息：{}", player.getName(), cChatMessage.getMessage());
+		sender.sendBroadcastChatMessage(new SChatMessage(player.getName(), cChatMessage.getMessage()));
 	}
 
-	public static void handleEnterDungeon(JSONObject status) {
+	public void handleDeath(Player player, CDeath cDeath) {
+		log.info("玩家{}死亡，死因：{}", player.getName(), cDeath.getCause());
+		sender.sendBroadcastDeath(player.getName(), cDeath.getCause());
 	}
 
-	public static void handleError(String message) {
+	public void handleEnterDungeon(Player player, CEnterDungeon cEnterDungeon) {
 	}
 
-	public static void handleGiveItem(JSONObject item) {
+	public void handleError(CError cError) {
 	}
 
-	public static void handleFloatingText(int type, String text) {
+	public void handleGiveItem(Player player, CGiveItem cGiveItem) {
 	}
 
-	public static void handleLeaveDungeon() {
+	public void handleFloatingText(Player player, CFloatingText cFloatingText) {
 	}
 
-	public static void handlePlayerMove(int depth, int pos) {
+	public void handleLeaveDungeon(Player player) {
 	}
 
-	public static void handleWin(JSONObject record) {
+	public void handlePlayerMove(Player player, CPlayerMove cPlayerMove) {
+	}
+
+	public void handleWin(Player player, CWin cWin) {
 	}
 }
