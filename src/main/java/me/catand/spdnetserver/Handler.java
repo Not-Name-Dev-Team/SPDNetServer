@@ -3,6 +3,7 @@ package me.catand.spdnetserver;
 import lombok.extern.slf4j.Slf4j;
 import me.catand.spdnetserver.data.actions.*;
 import me.catand.spdnetserver.data.events.SChatMessage;
+import me.catand.spdnetserver.data.events.SDeath;
 import me.catand.spdnetserver.entitys.Player;
 
 @Slf4j
@@ -30,7 +31,7 @@ public class Handler {
 
 	public void handleDeath(Player player, CDeath cDeath) {
 		log.info("玩家{}死亡，死因：{}", player.getName(), cDeath.getCause());
-		sender.sendBroadcastDeath(player.getName(), cDeath.getCause());
+		sender.sendBroadcastDeath(new SDeath(player.getName(), cDeath.getCause()));
 	}
 
 	public void handleEnterDungeon(Player player, CEnterDungeon cEnterDungeon) {

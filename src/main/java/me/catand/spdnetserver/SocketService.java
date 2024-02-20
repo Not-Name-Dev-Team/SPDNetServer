@@ -8,6 +8,8 @@ import jakarta.annotation.PreDestroy;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import me.catand.spdnetserver.data.actions.*;
+import me.catand.spdnetserver.data.events.SExit;
+import me.catand.spdnetserver.data.events.SJoin;
 import me.catand.spdnetserver.entitys.Player;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -79,14 +81,14 @@ public class SocketService {
 			} else {
 				Player player = playerRepository.findByKey(authToken);
 				playerMap.put(client.getSessionId(), player);
-				sender.sendBroadcastJoin(player.getName(), player.getPower());
+				sender.sendBroadcastJoin(new SJoin(player.getName(), player.getPower()));
 				log.info("玩家已连接: " + player.getName() + ", " + client.getSessionId());
 			}
 		});
 		server.addDisconnectListener(client -> {
 			Player player = playerMap.get(client.getSessionId());
 			playerMap.remove(client.getSessionId());
-			sender.sendBroadcastExit(player.getName());
+			sender.sendBroadcastExit(new SExit(player.getName()));
 			log.info("玩家已断开连接: " + player.getName(), client.getSessionId());
 		});
 		server.addEventListener(Actions.ACHIEVEMENT.getName(), CAchievement.class, (client, data, ackSender) -> {
