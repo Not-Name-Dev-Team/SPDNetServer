@@ -74,7 +74,7 @@ public class SocketService {
 				client.sendEvent(Events.ERROR.getName(), "Key无效");
 				log.info(client.getSessionId() + "连接失败: Key无效, " + authToken);
 				client.disconnect();
-			} else if (!spdProperties.getVersion().equals(spdVersion) || !spdProperties.getNetVersion().equals(netVersion)) {
+			} else if (!spdProperties.getVersion().equals(spdVersion) || (!spdProperties.getNetVersion().equals(netVersion) && !spdProperties.getNetVersion().equals(netVersion + "-INDEV"))) {
 				client.sendEvent(Events.ERROR.getName(), "版本不匹配");
 				log.info(client.getSessionId() + "连接失败: 版本不匹配, SPDVersion: " + spdVersion + ", NetVersion: " + netVersion);
 				client.disconnect();
