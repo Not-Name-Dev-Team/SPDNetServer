@@ -8,6 +8,7 @@ import jakarta.annotation.PreDestroy;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import me.catand.spdnetserver.data.actions.*;
+import me.catand.spdnetserver.data.events.SError;
 import me.catand.spdnetserver.data.events.SExit;
 import me.catand.spdnetserver.data.events.SJoin;
 import me.catand.spdnetserver.entitys.Player;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -67,16 +69,25 @@ public class SocketService {
 	private void startAll() {
 		server.addConnectListener(client -> {
 			HandshakeData handshakeData = client.getHandshakeData();
-			String authToken = handshakeData.getSingleUrlParam("token");
+			LinkedHashMap<String, String> authTokenMap = (LinkedHashMap) handshakeData.getAuthToken();
+			String authToken = null;
+			if (authTokenMap != null && authTokenMap.containsKey("token")) {
+				authToken = authTokenMap.get("token");
+			}
+			// 检测Query参数中的token
+			String authTokenQuery = handshakeData.getSingleUrlParam("token");
 			String spdVersion = handshakeData.getSingleUrlParam("SPDVersion");
 			String netVersion = handshakeData.getSingleUrlParam("NetVersion");
-			if (authToken == null || !playerRepository.existsByKey(authToken)) {
-				client.sendEvent(Events.ERROR.getName(), "Key无效");
-				log.info(client.getSessionId() + "连接失败: Key无效, " + authToken);
+			if (authToken == null) {
+				authToken = authTokenQuery;
+			}
+			if (!playerRepository.existsByKey(authToken)) {
+				client.sendEvent(Events.ERROR.getName(), new SError("Key无效"));
+				log.info("连接失败: Key无效, " + authToken + ", " + client.getSessionId());
 				client.disconnect();
-			} else if (!spdProperties.getVersion().equals(spdVersion) || (!spdProperties.getNetVersion().equals(netVersion) && !spdProperties.getNetVersion().equals(netVersion + "-INDEV"))) {
-				client.sendEvent(Events.ERROR.getName(), "版本不匹配");
-				log.info(client.getSessionId() + "连接失败: 版本不匹配, SPDVersion: " + spdVersion + ", NetVersion: " + netVersion);
+			} else if (!(spdProperties.getVersion().equals(spdVersion) && (spdProperties.getNetVersion().equals(netVersion) || spdProperties.getNetVersion().equals(netVersion + "-INDEV")))) {
+				client.sendEvent(Events.ERROR.getName(), new SError("版本不匹配"));
+				log.info("连接失败: 版本不匹配, SPDVersion: " + spdVersion + ", NetVersion: " + netVersion + ", " + client.getSessionId());
 				client.disconnect();
 			} else {
 				Player player = playerRepository.findByKey(authToken);
@@ -87,9 +98,11 @@ public class SocketService {
 		});
 		server.addDisconnectListener(client -> {
 			Player player = playerMap.get(client.getSessionId());
-			playerMap.remove(client.getSessionId());
-			sender.sendBroadcastExit(new SExit(player.getName()));
-			log.info("玩家已断开连接: " + player.getName(), client.getSessionId());
+			if (player != null) {
+				playerMap.remove(client.getSessionId());
+				sender.sendBroadcastExit(new SExit(player.getName()));
+				log.info("玩家已断开连接: " + player.getName() + ", " + client.getSessionId());
+			}
 		});
 		server.addEventListener(Actions.ACHIEVEMENT.getName(), CAchievement.class, (client, data, ackSender) -> {
 			handler.handleAchievement(playerMap.get(client.getSessionId()), data);
