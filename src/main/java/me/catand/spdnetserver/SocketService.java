@@ -2,6 +2,7 @@ package me.catand.spdnetserver;
 
 import com.corundumstudio.socketio.Configuration;
 import com.corundumstudio.socketio.HandshakeData;
+import com.corundumstudio.socketio.SocketIONamespace;
 import com.corundumstudio.socketio.SocketIOServer;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
@@ -33,6 +34,7 @@ public class SocketService {
 	private Map<UUID, Player> playerMap = new HashMap<>();
 	private Sender sender;
 	private Handler handler;
+	private SocketIONamespace spdNetNamespace;
 
 	public static SocketService getInstance() {
 		if (instance == null) {
@@ -52,6 +54,7 @@ public class SocketService {
 		config.setPort(21687);
 
 		server = new SocketIOServer(config);
+		spdNetNamespace = server.addNamespace("/spdnet");
 		server.start();
 		startAll();
 		sender = new Sender(server);
@@ -67,8 +70,9 @@ public class SocketService {
 	 * 启动所有事件
 	 */
 	private void startAll() {
-		server.addConnectListener(client -> {
+		spdNetNamespace.addConnectListener(client -> {
 			HandshakeData handshakeData = client.getHandshakeData();
+			// 检测Socket.IO设置的AuthToken
 			LinkedHashMap<String, String> authTokenMap = (LinkedHashMap) handshakeData.getAuthToken();
 			String authToken = null;
 			if (authTokenMap != null && authTokenMap.containsKey("token")) {
@@ -85,7 +89,7 @@ public class SocketService {
 				client.sendEvent(Events.ERROR.getName(), new SError("Key无效"));
 				log.info("连接失败: Key无效, " + authToken + ", " + client.getSessionId());
 				client.disconnect();
-			} else if (!(spdProperties.getVersion().equals(spdVersion) && (spdProperties.getNetVersion().equals(netVersion) || spdProperties.getNetVersion().equals(netVersion + "-INDEV")))) {
+			} else if (!(spdProperties.getVersion().equals(spdVersion) && (spdProperties.getNetVersion().equals(netVersion) || netVersion.equals(spdProperties.getNetVersion() + "-INDEV")))) {
 				client.sendEvent(Events.ERROR.getName(), new SError("版本不匹配"));
 				log.info("连接失败: 版本不匹配, SPDVersion: " + spdVersion + ", NetVersion: " + netVersion + ", " + client.getSessionId());
 				client.disconnect();
@@ -96,7 +100,7 @@ public class SocketService {
 				log.info("玩家已连接: " + player.getName() + ", " + client.getSessionId());
 			}
 		});
-		server.addDisconnectListener(client -> {
+		spdNetNamespace.addDisconnectListener(client -> {
 			Player player = playerMap.get(client.getSessionId());
 			if (player != null) {
 				playerMap.remove(client.getSessionId());
@@ -104,37 +108,37 @@ public class SocketService {
 				log.info("玩家已断开连接: " + player.getName() + ", " + client.getSessionId());
 			}
 		});
-		server.addEventListener(Actions.ACHIEVEMENT.getName(), CAchievement.class, (client, data, ackSender) -> {
+		spdNetNamespace.addEventListener(Actions.ACHIEVEMENT.getName(), CAchievement.class, (client, data, ackSender) -> {
 			handler.handleAchievement(playerMap.get(client.getSessionId()), data);
 		});
-		server.addEventListener(Actions.BACKPACK.getName(), CBackpack.class, (client, data, ackSender) -> {
+		spdNetNamespace.addEventListener(Actions.BACKPACK.getName(), CBackpack.class, (client, data, ackSender) -> {
 			handler.handleBackpack(playerMap.get(client.getSessionId()), data);
 		});
-		server.addEventListener(Actions.CHAT_MESSAGE.getName(), CChatMessage.class, (client, data, ackSender) -> {
+		spdNetNamespace.addEventListener(Actions.CHAT_MESSAGE.getName(), CChatMessage.class, (client, data, ackSender) -> {
 			handler.handleChatMessage(playerMap.get(client.getSessionId()), data);
 		});
-		server.addEventListener(Actions.DEATH.getName(), CDeath.class, (client, data, ackSender) -> {
+		spdNetNamespace.addEventListener(Actions.DEATH.getName(), CDeath.class, (client, data, ackSender) -> {
 			handler.handleDeath(playerMap.get(client.getSessionId()), data);
 		});
-		server.addEventListener(Actions.ENTER_DUNGEON.getName(), CEnterDungeon.class, (client, data, ackSender) -> {
+		spdNetNamespace.addEventListener(Actions.ENTER_DUNGEON.getName(), CEnterDungeon.class, (client, data, ackSender) -> {
 			handler.handleEnterDungeon(playerMap.get(client.getSessionId()), data);
 		});
-		server.addEventListener(Actions.ERROR.getName(), CError.class, (client, data, ackSender) -> {
+		spdNetNamespace.addEventListener(Actions.ERROR.getName(), CError.class, (client, data, ackSender) -> {
 			handler.handleError(data);
 		});
-		server.addEventListener(Actions.GIVE_ITEM.getName(), CGiveItem.class, (client, data, ackSender) -> {
+		spdNetNamespace.addEventListener(Actions.GIVE_ITEM.getName(), CGiveItem.class, (client, data, ackSender) -> {
 			handler.handleGiveItem(playerMap.get(client.getSessionId()), data);
 		});
-		server.addEventListener(Actions.FLOATING_TEXT.getName(), CFloatingText.class, (client, data, ackSender) -> {
+		spdNetNamespace.addEventListener(Actions.FLOATING_TEXT.getName(), CFloatingText.class, (client, data, ackSender) -> {
 			handler.handleFloatingText(playerMap.get(client.getSessionId()), data);
 		});
-		server.addEventListener(Actions.LEAVE_DUNGEON.getName(), CLeaveDungeon.class, (client, data, ackSender) -> {
+		spdNetNamespace.addEventListener(Actions.LEAVE_DUNGEON.getName(), CLeaveDungeon.class, (client, data, ackSender) -> {
 			handler.handleLeaveDungeon(playerMap.get(client.getSessionId()));
 		});
-		server.addEventListener(Actions.PLAYER_MOVE.getName(), CPlayerMove.class, (client, data, ackSender) -> {
+		spdNetNamespace.addEventListener(Actions.PLAYER_MOVE.getName(), CPlayerMove.class, (client, data, ackSender) -> {
 			handler.handlePlayerMove(playerMap.get(client.getSessionId()), data);
 		});
-		server.addEventListener(Actions.WIN.getName(), CWin.class, (client, data, ackSender) -> {
+		spdNetNamespace.addEventListener(Actions.WIN.getName(), CWin.class, (client, data, ackSender) -> {
 			handler.handleWin(playerMap.get(client.getSessionId()), data);
 		});
 	}
