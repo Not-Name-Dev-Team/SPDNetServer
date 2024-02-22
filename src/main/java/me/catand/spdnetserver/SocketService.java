@@ -1,5 +1,6 @@
 package me.catand.spdnetserver;
 
+import com.alibaba.fastjson2.JSON;
 import com.corundumstudio.socketio.Configuration;
 import com.corundumstudio.socketio.HandshakeData;
 import com.corundumstudio.socketio.SocketIONamespace;
@@ -108,38 +109,38 @@ public class SocketService {
 				log.info("玩家已断开连接: " + player.getName() + ", " + client.getSessionId());
 			}
 		});
-		spdNetNamespace.addEventListener(Actions.ACHIEVEMENT.getName(), CAchievement.class, (client, data, ackSender) -> {
-			handler.handleAchievement(playerMap.get(client.getSessionId()), data);
+		spdNetNamespace.addEventListener(Actions.ACHIEVEMENT.getName(), String.class, (client, data, ackSender) -> {
+			handler.handleAchievement(playerMap.get(client.getSessionId()), JSON.parseObject(data, CAchievement.class));
 		});
-		spdNetNamespace.addEventListener(Actions.BACKPACK.getName(), CBackpack.class, (client, data, ackSender) -> {
-			handler.handleBackpack(playerMap.get(client.getSessionId()), data);
+		spdNetNamespace.addEventListener(Actions.BACKPACK.getName(), String.class, (client, data, ackSender) -> {
+			handler.handleBackpack(playerMap.get(client.getSessionId()), JSON.parseObject(data, CBackpack.class));
 		});
-		spdNetNamespace.addEventListener(Actions.CHAT_MESSAGE.getName(), CChatMessage.class, (client, data, ackSender) -> {
-			handler.handleChatMessage(playerMap.get(client.getSessionId()), data);
+		spdNetNamespace.addEventListener(Actions.CHAT_MESSAGE.getName(), String.class, (client, data, ackSender) -> {
+			handler.handleChatMessage(playerMap.get(client.getSessionId()), JSON.parseObject(data, CChatMessage.class));
 		});
-		spdNetNamespace.addEventListener(Actions.DEATH.getName(), CDeath.class, (client, data, ackSender) -> {
-			handler.handleDeath(playerMap.get(client.getSessionId()), data);
+		spdNetNamespace.addEventListener(Actions.DEATH.getName(), String.class, (client, data, ackSender) -> {
+			handler.handleDeath(playerMap.get(client.getSessionId()), JSON.parseObject(data, CDeath.class));
 		});
-		spdNetNamespace.addEventListener(Actions.ENTER_DUNGEON.getName(), CEnterDungeon.class, (client, data, ackSender) -> {
-			handler.handleEnterDungeon(playerMap.get(client.getSessionId()), data);
+		spdNetNamespace.addEventListener(Actions.ENTER_DUNGEON.getName(), String.class, (client, data, ackSender) -> {
+			handler.handleEnterDungeon(playerMap.get(client.getSessionId()), JSON.parseObject(data, CEnterDungeon.class));
 		});
-		spdNetNamespace.addEventListener(Actions.ERROR.getName(), CError.class, (client, data, ackSender) -> {
-			handler.handleError(data);
+		spdNetNamespace.addEventListener(Actions.ERROR.getName(), String.class, (client, data, ackSender) -> {
+			handler.handleError(playerMap.get(client.getSessionId()), JSON.parseObject(data, CError.class));
 		});
-		spdNetNamespace.addEventListener(Actions.GIVE_ITEM.getName(), CGiveItem.class, (client, data, ackSender) -> {
-			handler.handleGiveItem(playerMap.get(client.getSessionId()), data);
+		spdNetNamespace.addEventListener(Actions.GIVE_ITEM.getName(), String.class, (client, data, ackSender) -> {
+			handler.handleGiveItem(playerMap.get(client.getSessionId()), JSON.parseObject(data, CGiveItem.class));
 		});
-		spdNetNamespace.addEventListener(Actions.FLOATING_TEXT.getName(), CFloatingText.class, (client, data, ackSender) -> {
-			handler.handleFloatingText(playerMap.get(client.getSessionId()), data);
+		spdNetNamespace.addEventListener(Actions.FLOATING_TEXT.getName(), String.class, (client, data, ackSender) -> {
+			handler.handleFloatingText(playerMap.get(client.getSessionId()), JSON.parseObject(data, CFloatingText.class));
 		});
-		spdNetNamespace.addEventListener(Actions.LEAVE_DUNGEON.getName(), CLeaveDungeon.class, (client, data, ackSender) -> {
-			handler.handleLeaveDungeon(playerMap.get(client.getSessionId()));
+		spdNetNamespace.addEventListener(Actions.LEAVE_DUNGEON.getName(), String.class, (client, data, ackSender) -> {
+			handler.handleLeaveDungeon(playerMap.get(client.getSessionId()), JSON.parseObject(data, CLeaveDungeon.class));
 		});
-		spdNetNamespace.addEventListener(Actions.PLAYER_MOVE.getName(), CPlayerMove.class, (client, data, ackSender) -> {
-			handler.handlePlayerMove(playerMap.get(client.getSessionId()), data);
+		spdNetNamespace.addEventListener(Actions.PLAYER_MOVE.getName(), String.class, (client, data, ackSender) -> {
+			handler.handlePlayerMove(playerMap.get(client.getSessionId()), JSON.parseObject(data, CPlayerMove.class));
 		});
-		spdNetNamespace.addEventListener(Actions.WIN.getName(), CWin.class, (client, data, ackSender) -> {
-			handler.handleWin(playerMap.get(client.getSessionId()), data);
+		spdNetNamespace.addEventListener(Actions.WIN.getName(), String.class, (client, data, ackSender) -> {
+			handler.handleWin(playerMap.get(client.getSessionId()), JSON.parseObject(data, CWin.class));
 		});
 	}
 }

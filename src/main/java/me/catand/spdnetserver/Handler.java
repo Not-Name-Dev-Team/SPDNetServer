@@ -37,7 +37,7 @@ public class Handler {
 	public void handleEnterDungeon(Player player, CEnterDungeon cEnterDungeon) {
 	}
 
-	public void handleError(CError cError) {
+	public void handleError(Player player, CError cError) {
 	}
 
 	public void handleGiveItem(Player player, CGiveItem cGiveItem) {
@@ -46,7 +46,7 @@ public class Handler {
 	public void handleFloatingText(Player player, CFloatingText cFloatingText) {
 	}
 
-	public void handleLeaveDungeon(Player player) {
+	public void handleLeaveDungeon(Player player, CLeaveDungeon cLeaveDungeon) {
 	}
 
 	public void handlePlayerMove(Player player, CPlayerMove cPlayerMove) {
