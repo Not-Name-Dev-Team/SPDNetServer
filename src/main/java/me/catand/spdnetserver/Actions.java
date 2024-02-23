@@ -8,6 +8,7 @@ import lombok.Getter;
 @Getter
 public enum Actions {
 	ACHIEVEMENT("achievement"),
+	ANKH_USED("ankhUsed"),
 	BACKPACK("backpack"),
 	CHAT_MESSAGE("chatMessage"),
 	DEATH("death"),

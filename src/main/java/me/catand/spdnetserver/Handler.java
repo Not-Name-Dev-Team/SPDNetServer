@@ -21,6 +21,9 @@ public class Handler {
 	public void handleAchievement(Player player, CAchievement cAchievement) {
 	}
 
+	public void handleAnkhUsed(Player player, CAnkhUsed cAnkhUsed) {
+	}
+
 	public void handleBackpack(Player player, CBackpack cBackpack) {
 	}
 

@@ -112,6 +112,9 @@ public class SocketService {
 		spdNetNamespace.addEventListener(Actions.ACHIEVEMENT.getName(), String.class, (client, data, ackSender) -> {
 			handler.handleAchievement(playerMap.get(client.getSessionId()), JSON.parseObject(data, CAchievement.class));
 		});
+		spdNetNamespace.addEventListener(Actions.ANKH_USED.getName(), String.class, (client, data, ackSender) -> {
+			handler.handleAnkhUsed(playerMap.get(client.getSessionId()), JSON.parseObject(data, CAnkhUsed.class));
+		});
 		spdNetNamespace.addEventListener(Actions.BACKPACK.getName(), String.class, (client, data, ackSender) -> {
 			handler.handleBackpack(playerMap.get(client.getSessionId()), JSON.parseObject(data, CBackpack.class));
 		});
