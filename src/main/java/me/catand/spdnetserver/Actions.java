@@ -9,13 +9,13 @@ import lombok.Getter;
 public enum Actions {
 	ACHIEVEMENT("achievement"),
 	ANKH_USED("ankhUsed"),
-	BACKPACK("backpack"),
 	CHAT_MESSAGE("chatMessage"),
 	DEATH("death"),
 	ENTER_DUNGEON("enterDungeon"),
 	ERROR("error"),
 	FLOATING_TEXT("floatingText"),
 	GIVE_ITEM("giveItem"),
+	HERO("hero"),
 	LEAVE_DUNGEON("leaveDungeon"),
 	PLAYER_MOVE("playerMove"),
 	WIN("win");

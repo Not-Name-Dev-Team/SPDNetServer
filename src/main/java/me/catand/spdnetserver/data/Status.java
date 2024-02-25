@@ -12,5 +12,4 @@ public class Status {
 	private int challenges;
 	private long seed;
 	private int depth;
-	private JSONObject hero;
 }
