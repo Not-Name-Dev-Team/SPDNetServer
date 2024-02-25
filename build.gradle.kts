@@ -1,6 +1,6 @@
 plugins {
     java
-    id("org.springframework.boot") version "3.2.2"
+    id("org.springframework.boot") version "3.2.3"
     id("io.spring.dependency-management") version "1.1.4"
 }
 
@@ -32,7 +32,7 @@ dependencies {
     annotationProcessor("org.projectlombok:lombok:1.18.30")
 
     // Shiro
-    implementation("com.mikuac:shiro:2.1.6")
+    implementation("com.mikuac:shiro:2.1.7")
 
     // Database
     implementation("org.springframework.boot:spring-boot-starter-data-jpa:3.2.2")
