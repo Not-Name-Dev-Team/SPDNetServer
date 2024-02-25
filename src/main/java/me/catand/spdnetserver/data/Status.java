@@ -1,13 +1,14 @@
 package me.catand.spdnetserver.data;
 
-import com.alibaba.fastjson2.JSONObject;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
+@Setter
 public class Status {
 	private int challenges;
 	private long seed;

@@ -1,7 +1,9 @@
 package me.catand.spdnetserver;
 
+import com.corundumstudio.socketio.SocketIOClient;
 import com.corundumstudio.socketio.SocketIOServer;
 import me.catand.spdnetserver.data.events.*;
+import me.catand.spdnetserver.entitys.Player;
 
 public class Sender {
 	private SocketIOServer server;
@@ -60,5 +62,9 @@ public class Sender {
 
 	public void sendBroadcastWin(SWin data) {
 		server.getBroadcastOperations().sendEvent(Events.WIN.getName(), data);
+	}
+
+	public void sendInit(SocketIOClient client, SInit data) {
+		client.sendEvent(Events.INIT.getName(), data);
 	}
 }

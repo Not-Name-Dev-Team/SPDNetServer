@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import me.catand.spdnetserver.data.actions.*;
 import me.catand.spdnetserver.data.events.SError;
 import me.catand.spdnetserver.data.events.SExit;
+import me.catand.spdnetserver.data.events.SInit;
 import me.catand.spdnetserver.data.events.SJoin;
 import me.catand.spdnetserver.entitys.Player;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
 @Getter
@@ -36,6 +38,7 @@ public class SocketService {
 	private Sender sender;
 	private Handler handler;
 	private SocketIONamespace spdNetNamespace;
+	public static ConcurrentHashMap<String, Long> seeds = new ConcurrentHashMap<>();
 
 	public static SocketService getInstance() {
 		if (instance == null) {
@@ -56,6 +59,8 @@ public class SocketService {
 
 		server = new SocketIOServer(config);
 		spdNetNamespace = server.addNamespace("/spdnet");
+		seeds.put("seed1", 114514L);
+		seeds.put("seed2", 114515L);
 		server.start();
 		startAll();
 		sender = new Sender(server);
@@ -97,6 +102,8 @@ public class SocketService {
 			} else {
 				Player player = playerRepository.findByKey(authToken);
 				playerMap.put(client.getSessionId(), player);
+				SInit sInit = new SInit(player.getName(), spdProperties.getMotd(), seeds);
+				sender.sendInit(client, sInit);
 				sender.sendBroadcastJoin(new SJoin(player.getName(), player.getPower()));
 				log.info("玩家已连接: " + player.getName() + ", " + client.getSessionId());
 			}

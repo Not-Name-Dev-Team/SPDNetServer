@@ -1,6 +1,7 @@
 package me.catand.spdnetserver;
 
 import lombok.extern.slf4j.Slf4j;
+import me.catand.spdnetserver.data.Status;
 import me.catand.spdnetserver.data.actions.*;
 import me.catand.spdnetserver.data.events.SChatMessage;
 import me.catand.spdnetserver.data.events.SDeath;
@@ -35,6 +36,8 @@ public class Handler {
 	}
 
 	public void handleEnterDungeon(Player player, CEnterDungeon cEnterDungeon) {
+		Status status = cEnterDungeon.getStatus();
+		log.info("玩家{}以{}挑进入了{}地牢第{}层", player.getName(), Challenges.countActiveChallenges(status.getChallenges()), status.getSeed(), status.getDepth());
 	}
 
 	public void handleError(Player player, CError cError) {
