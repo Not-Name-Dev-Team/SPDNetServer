@@ -18,6 +18,7 @@ public enum Actions {
 	HERO("hero"),
 	LEAVE_DUNGEON("leaveDungeon"),
 	PLAYER_MOVE("playerMove"),
+	VIEW_HERO("viewHero"),
 	WIN("win");
 	private final String name;
 

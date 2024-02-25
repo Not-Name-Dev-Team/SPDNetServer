@@ -14,10 +14,6 @@ public class Sender {
 		server.getBroadcastOperations().sendEvent(Events.ACHIEVEMENT.getName(), data);
 	}
 
-	public void sendBroadcastBackpack(SBackpack data) {
-		server.getBroadcastOperations().sendEvent(Events.BACKPACK.getName(), data);
-	}
-
 	public void sendBroadcastChatMessage(SChatMessage sChatMessage) {
 		server.getBroadcastOperations().sendEvent(Events.CHAT_MESSAGE.getName(), sChatMessage);
 	}

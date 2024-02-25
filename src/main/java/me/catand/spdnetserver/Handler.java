@@ -24,9 +24,6 @@ public class Handler {
 	public void handleAnkhUsed(Player player, CAnkhUsed cAnkhUsed) {
 	}
 
-	public void handleBackpack(Player player, CBackpack cBackpack) {
-	}
-
 	public void handleChatMessage(Player player, CChatMessage cChatMessage) {
 		log.info("玩家{}发送了消息：{}", player.getName(), cChatMessage.getMessage());
 		sender.sendBroadcastChatMessage(new SChatMessage(player.getName(), cChatMessage.getMessage()));
@@ -43,16 +40,22 @@ public class Handler {
 	public void handleError(Player player, CError cError) {
 	}
 
+	public void handleFloatingText(Player player, CFloatingText cFloatingText) {
+	}
+
 	public void handleGiveItem(Player player, CGiveItem cGiveItem) {
 	}
 
-	public void handleFloatingText(Player player, CFloatingText cFloatingText) {
+	public void handleHero(Player player, CHero cHero) {
 	}
 
 	public void handleLeaveDungeon(Player player, CLeaveDungeon cLeaveDungeon) {
 	}
 
 	public void handlePlayerMove(Player player, CPlayerMove cPlayerMove) {
+	}
+
+	public void handleViewHero(Player player, CViewHero cViewHero) {
 	}
 
 	public void handleWin(Player player, CWin cWin) {
