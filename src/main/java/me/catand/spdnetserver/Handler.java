@@ -1,22 +1,29 @@
 package me.catand.spdnetserver;
 
+import com.corundumstudio.socketio.SocketIOClient;
 import lombok.extern.slf4j.Slf4j;
 import me.catand.spdnetserver.data.Status;
 import me.catand.spdnetserver.data.actions.*;
 import me.catand.spdnetserver.data.events.SChatMessage;
 import me.catand.spdnetserver.data.events.SDeath;
+import me.catand.spdnetserver.data.events.SEnterDungeon;
 import me.catand.spdnetserver.entitys.Player;
+
+import java.util.Map;
+import java.util.UUID;
 
 @Slf4j
 public class Handler {
 	private PlayerRepository playerRepository;
 	private SocketService socketService;
 	private Sender sender;
+	private Map<UUID, Player> playerMap;
 
-	public Handler(PlayerRepository playerRepository, SocketService socketService, Sender sender) {
+	public Handler(PlayerRepository playerRepository, SocketService socketService, Sender sender, Map<UUID, Player> playerMap) {
 		this.playerRepository = playerRepository;
 		this.socketService = socketService;
 		this.sender = sender;
+		this.playerMap = playerMap;
 	}
 
 	public void handleAchievement(Player player, CAchievement cAchievement) {
@@ -35,8 +42,11 @@ public class Handler {
 		sender.sendBroadcastDeath(new SDeath(player.getName(), cDeath.getCause()));
 	}
 
-	public void handleEnterDungeon(Player player, CEnterDungeon cEnterDungeon) {
+	public void handleEnterDungeon(SocketIOClient client, Player player, CEnterDungeon cEnterDungeon) {
 		Status status = cEnterDungeon.getStatus();
+		player.setStatus(status);
+		playerMap.put(client.getSessionId(), player);
+		sender.sendBroadcastEnterDungeon(new SEnterDungeon(player.getName(), status));
 		log.info("玩家{}以{}挑进入了{}地牢第{}层", player.getName(), Challenges.countActiveChallenges(status.getChallenges()), status.getSeed(), status.getDepth());
 	}
 

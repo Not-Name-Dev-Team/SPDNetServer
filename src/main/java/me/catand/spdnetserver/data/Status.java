@@ -21,4 +21,5 @@ public class Status {
 	 * 穿职业护甲的时候是10(和板甲区分开)
 	 */
 	private int armorTier;
+	private int pos;
 }

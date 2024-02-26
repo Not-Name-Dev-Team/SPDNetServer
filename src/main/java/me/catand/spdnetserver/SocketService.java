@@ -34,7 +34,7 @@ public class SocketService {
 	@Autowired
 	private SpdProperties spdProperties;
 	private SocketIOServer server;
-	private Map<UUID, Player> playerMap = new HashMap<>();
+	private Map<UUID, Player> playerMap = new ConcurrentHashMap<>();
 	private Sender sender;
 	private Handler handler;
 	private SocketIONamespace spdNetNamespace;
@@ -64,7 +64,7 @@ public class SocketService {
 		server.start();
 		startAll();
 		sender = new Sender(server);
-		handler = new Handler(playerRepository, this, sender);
+		handler = new Handler(playerRepository, this, sender, playerMap);
 	}
 
 	@PreDestroy
@@ -129,7 +129,7 @@ public class SocketService {
 			handler.handleDeath(playerMap.get(client.getSessionId()), JSON.parseObject(data, CDeath.class));
 		});
 		spdNetNamespace.addEventListener(Actions.ENTER_DUNGEON.getName(), String.class, (client, data, ackSender) -> {
-			handler.handleEnterDungeon(playerMap.get(client.getSessionId()), JSON.parseObject(data, CEnterDungeon.class));
+			handler.handleEnterDungeon(client, playerMap.get(client.getSessionId()), JSON.parseObject(data, CEnterDungeon.class));
 		});
 		spdNetNamespace.addEventListener(Actions.ERROR.getName(), String.class, (client, data, ackSender) -> {
 			handler.handleError(playerMap.get(client.getSessionId()), JSON.parseObject(data, CError.class));
