@@ -48,6 +48,10 @@ public class Sender {
 		server.getBroadcastOperations().sendEvent(Events.JOIN.getName(), data);
 	}
 
+	public void sendBroadcastPlayerChangeFloor(SPlayerChangeFloor data) {
+		server.getBroadcastOperations().sendEvent(Events.PLAYER_CHANGE_FLOOR.getName(), data);
+	}
+
 	public void sendBroadcastLeaveDungeon(SLeaveDungeon data) {
 		server.getBroadcastOperations().sendEvent(Events.LEAVE_DUNGEON.getName(), data);
 	}

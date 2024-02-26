@@ -4,10 +4,7 @@ import com.corundumstudio.socketio.SocketIOClient;
 import lombok.extern.slf4j.Slf4j;
 import me.catand.spdnetserver.data.Status;
 import me.catand.spdnetserver.data.actions.*;
-import me.catand.spdnetserver.data.events.SChatMessage;
-import me.catand.spdnetserver.data.events.SDeath;
-import me.catand.spdnetserver.data.events.SEnterDungeon;
-import me.catand.spdnetserver.data.events.SPlayerMove;
+import me.catand.spdnetserver.data.events.*;
 import me.catand.spdnetserver.entitys.Player;
 
 import java.util.Map;
@@ -69,8 +66,12 @@ public class Handler {
 	public void handleLeaveDungeon(Player player, CLeaveDungeon cLeaveDungeon) {
 	}
 
+	public void handlePlayerChangeFloor(Player player, CPlayerChangeFloor cPlayerChangeFloor) {
+		sender.sendBroadcastPlayerChangeFloor(new SPlayerChangeFloor(player.getName(), cPlayerChangeFloor.getDepth()));
+	}
+
 	public void handlePlayerMove(Player player, CPlayerMove cPlayerMove) {
-		sender.sendBroadcastPlayerMove(new SPlayerMove(player.getName(), cPlayerMove.getDepth(), cPlayerMove.getPos()));
+		sender.sendBroadcastPlayerMove(new SPlayerMove(player.getName(), cPlayerMove.getPos()));
 	}
 
 	public void handleRequestPlayerList(SocketIOClient client, CRequestPlayerList cRequestPlayerList) {

@@ -18,6 +18,7 @@ public enum Actions {
 	GIVE_ITEM("giveItem"),
 	HERO("hero"),
 	LEAVE_DUNGEON("leaveDungeon"),
+	PLAYER_CHANGE_FLOOR("playerChangeFloor"),
 	PLAYER_MOVE("playerMove"),
 	REQUEST_PLAYER_LIST("requestPlayerList"),
 	VIEW_HERO("viewHero"),

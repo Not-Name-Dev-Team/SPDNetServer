@@ -20,6 +20,7 @@ public enum Events {
 	INIT("init"),
 	JOIN("join"),
 	LEAVE_DUNGEON("leaveDungeon"),
+	PLAYER_CHANGE_FLOOR("playerChangeFloor"),
 	PLAYER_LIST("playerList"),
 	PLAYER_MOVE("playerMove"),
 	SERVER_MESSAGE("serverMessage"),

@@ -12,6 +12,5 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CPlayerMove extends Data {
-	private int depth;
 	private int pos;
 }
