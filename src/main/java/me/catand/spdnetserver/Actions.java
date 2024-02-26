@@ -9,6 +9,7 @@ import lombok.Getter;
 public enum Actions {
 	ACHIEVEMENT("achievement"),
 	ANKH_USED("ankhUsed"),
+	ARMOR_UPDATE("armorUpdate"),
 	CHAT_MESSAGE("chatMessage"),
 	DEATH("death"),
 	ENTER_DUNGEON("enterDungeon"),
@@ -18,6 +19,7 @@ public enum Actions {
 	HERO("hero"),
 	LEAVE_DUNGEON("leaveDungeon"),
 	PLAYER_MOVE("playerMove"),
+	REQUEST_PLAYER_LIST("requestPlayerList"),
 	VIEW_HERO("viewHero"),
 	WIN("win");
 	private final String name;

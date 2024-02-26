@@ -7,6 +7,7 @@ import me.catand.spdnetserver.data.actions.*;
 import me.catand.spdnetserver.data.events.SChatMessage;
 import me.catand.spdnetserver.data.events.SDeath;
 import me.catand.spdnetserver.data.events.SEnterDungeon;
+import me.catand.spdnetserver.data.events.SPlayerMove;
 import me.catand.spdnetserver.entitys.Player;
 
 import java.util.Map;
@@ -30,6 +31,9 @@ public class Handler {
 	}
 
 	public void handleAnkhUsed(Player player, CAnkhUsed cAnkhUsed) {
+	}
+
+	public void handleArmorUpdate(Player player, CArmorUpdate cArmorUpdate) {
 	}
 
 	public void handleChatMessage(Player player, CChatMessage cChatMessage) {
@@ -66,6 +70,10 @@ public class Handler {
 	}
 
 	public void handlePlayerMove(Player player, CPlayerMove cPlayerMove) {
+		sender.sendBroadcastPlayerMove(new SPlayerMove(player.getName(), cPlayerMove.getDepth(), cPlayerMove.getPos()));
+	}
+
+	public void handleRequestPlayerList(SocketIOClient client, CRequestPlayerList cRequestPlayerList) {
 	}
 
 	public void handleViewHero(Player player, CViewHero cViewHero) {
