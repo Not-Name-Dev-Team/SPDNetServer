@@ -1,6 +1,5 @@
 package me.catand.spdnetserver.data.actions;
 
-import com.alibaba.fastjson2.JSONObject;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
