@@ -10,10 +10,7 @@ import jakarta.annotation.PreDestroy;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import me.catand.spdnetserver.data.actions.*;
-import me.catand.spdnetserver.data.events.SError;
-import me.catand.spdnetserver.data.events.SExit;
-import me.catand.spdnetserver.data.events.SInit;
-import me.catand.spdnetserver.data.events.SJoin;
+import me.catand.spdnetserver.data.events.*;
 import me.catand.spdnetserver.entitys.Player;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -100,10 +97,22 @@ public class SocketService {
 				client.disconnect();
 			} else {
 				Player player = playerRepository.findByKey(authToken);
+				final boolean[] isDuplicate = {false};
+				playerMap.forEach((uuid, player1) -> {
+					if (player1.getName().equals(player.getName())) {
+						client.sendEvent(Events.ERROR.getName(), new SError(player.getName() + "已登录, 重复登录"));
+						log.info("连接失败: " + player.getName() + "已登录, 重复登录, " + client.getSessionId());
+						client.disconnect();
+						isDuplicate[0] = true;
+					}
+				});
+				if (isDuplicate[0]) {
+					return;
+				}
 				playerMap.put(client.getSessionId(), player);
-				SInit sInit = new SInit(player.getName(), spdProperties.getMotd(), seeds);
-				sender.sendInit(client, sInit);
+				sender.sendInit(client, new SInit(player.getName(), spdProperties.getMotd(), seeds));
 				sender.sendBroadcastJoin(new SJoin(player.getName(), player.getPower()));
+				sender.sendPlayerList(client, new SPlayerList(playerMap));
 				log.info("玩家已连接: " + player.getName() + ", " + client.getSessionId());
 			}
 		});

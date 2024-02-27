@@ -72,9 +72,12 @@ public class Handler {
 
 	public void handlePlayerMove(Player player, CPlayerMove cPlayerMove) {
 		sender.sendBroadcastPlayerMove(new SPlayerMove(player.getName(), cPlayerMove.getPos()));
+		log.info("玩家{}移动到了{}", player.getName(), cPlayerMove.getPos());
 	}
 
 	public void handleRequestPlayerList(SocketIOClient client, CRequestPlayerList cRequestPlayerList) {
+		sender.sendPlayerList(client, new SPlayerList(playerMap));
+		log.info("玩家{}请求了玩家列表", playerMap.get(client.getSessionId()).getName());
 	}
 
 	public void handleViewHero(Player player, CViewHero cViewHero) {

@@ -71,4 +71,8 @@ public class Sender {
 	public void sendInit(SocketIOClient client, SInit data) {
 		client.sendEvent(Events.INIT.getName(), data);
 	}
+
+	public void sendPlayerList(SocketIOClient client, SPlayerList data) {
+		client.sendEvent(Events.PLAYER_LIST.getName(), data);
+	}
 }
