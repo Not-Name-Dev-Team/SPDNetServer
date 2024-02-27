@@ -12,6 +12,7 @@ import me.catand.spdnetserver.data.Data;
 @NoArgsConstructor
 public class SFloatingText extends Data {
 	private String name;
-	private int type;
+	private int color;
 	private String text;
+	private int icon;
 }
