@@ -14,7 +14,6 @@ import java.util.List;
 public class Player {
 
 	@Column(unique = true)
-	@JSONField(serialize = false)
 	private long qq;
 
 	@Id
@@ -30,9 +29,11 @@ public class Player {
 	@JSONField(serialize = false)
 	private String email;
 
-	@Lob
-	@JSONField(serialize = false)
-	private String cloudSaveData;
+	// 先搁置 实现日期不另行通知
+//	@Lob
+//	@Transient
+//	@JSONField(serialize = false)
+//	private String cloudSaveData;
 
 	@Transient
 	private Status status;
