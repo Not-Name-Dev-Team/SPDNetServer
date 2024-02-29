@@ -111,7 +111,7 @@ public class SocketService {
 				}
 				playerMap.put(client.getSessionId(), player);
 				sender.sendInit(client, new SInit(player.getName(), spdProperties.getMotd(), seeds));
-				sender.sendBroadcastJoin(new SJoin(player.getName(), player.getPower()));
+				sender.sendBroadcastJoin(new SJoin(player.getQq(), player.getName(), player.getPower()));
 				sender.sendPlayerList(client, new SPlayerList(playerMap));
 				log.info("玩家已连接: " + player.getName() + ", " + client.getSessionId());
 			}

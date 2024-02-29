@@ -12,8 +12,9 @@ import lombok.Setter;
 public class Status {
 	private int challenges;
 	private long seed;
-	private int depth;
 	private int heroClass;
+	private int gameMode;
+	private int depth;
 	/**
 	 * 护甲等阶, 大多数情况下就是Armor的tier
 	 * 但是有两种特殊情况:
