@@ -5,11 +5,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import me.catand.spdnetserver.data.Data;
+import me.catand.spdnetserver.entitys.GameRecord;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class CDeath extends Data {
-	private String cause;
+	private GameRecord record;
 }

@@ -39,8 +39,8 @@ public class Handler {
 	}
 
 	public void handleDeath(Player player, CDeath cDeath) {
-		log.info("玩家{}死亡，死因：{}", player.getName(), cDeath.getCause());
-		sender.sendBroadcastDeath(new SDeath(player.getName(), cDeath.getCause()));
+		log.info("玩家{}死亡，死因：{}", player.getName(), cDeath.getRecord());
+		sender.sendBroadcastDeath(new SDeath(player.getName(), cDeath.getRecord()));
 	}
 
 	public void handleEnterDungeon(SocketIOClient client, Player player, CEnterDungeon cEnterDungeon) {
