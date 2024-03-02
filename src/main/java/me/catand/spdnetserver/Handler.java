@@ -65,6 +65,7 @@ public class Handler {
 	}
 
 	public void handleLeaveDungeon(Player player, CLeaveDungeon cLeaveDungeon) {
+		sender.sendBroadcastLeaveDungeon(new SLeaveDungeon(player.getName()));
 	}
 
 	public void handlePlayerChangeFloor(Player player, CPlayerChangeFloor cPlayerChangeFloor) {
