@@ -2,9 +2,10 @@ package me.catand.spdnetserver;
 
 import com.corundumstudio.socketio.SocketIOClient;
 import com.corundumstudio.socketio.SocketIOServer;
+import lombok.extern.slf4j.Slf4j;
 import me.catand.spdnetserver.data.events.*;
-import me.catand.spdnetserver.entitys.Player;
 
+@Slf4j
 public class Sender {
 	private SocketIOServer server;
 
@@ -74,5 +75,13 @@ public class Sender {
 
 	public void sendPlayerList(SocketIOClient client, SPlayerList data) {
 		client.sendEvent(Events.PLAYER_LIST.getName(), data);
+	}
+
+	public void sendHero(SocketIOClient client, SHero data) {
+		client.sendEvent(Events.HERO.getName(), data);
+	}
+
+	public void sendViewHero(SocketIOClient client, SViewHero data) {
+		client.sendEvent(Events.VIEW_HERO.getName(), data);
 	}
 }

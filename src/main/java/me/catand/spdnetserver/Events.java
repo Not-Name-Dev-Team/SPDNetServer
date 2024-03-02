@@ -24,6 +24,7 @@ public enum Events {
 	PLAYER_LIST("playerList"),
 	PLAYER_MOVE("playerMove"),
 	SERVER_MESSAGE("serverMessage"),
+	VIEW_HERO("viewHero"),
 	WIN("win");
 
 

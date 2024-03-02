@@ -62,6 +62,11 @@ public class Handler {
 	}
 
 	public void handleHero(Player player, CHero cHero) {
+		playerMap.forEach((uuid, player1) -> {
+			if (player1.getName().equals(cHero.getSourceName())) {
+				sender.sendHero(socketService.getServer().getNamespace("/spdnet").getClient(uuid), new SHero(player.getName(), cHero.getHero()));
+			}
+		});
 	}
 
 	public void handleLeaveDungeon(Player player, CLeaveDungeon cLeaveDungeon) {
@@ -83,6 +88,12 @@ public class Handler {
 	}
 
 	public void handleViewHero(Player player, CViewHero cViewHero) {
+		log.info("玩家{}请求查看玩家{}", player.getName(), cViewHero.getTargetName());
+		playerMap.forEach((uuid, player1) -> {
+			if (player1.getName().equals(cViewHero.getTargetName())) {
+				sender.sendViewHero(socketService.getServer().getNamespace("/spdnet").getClient(uuid), new SViewHero(player.getName()));
+			}
+		});
 	}
 
 	public void handleWin(Player player, CWin cWin) {
