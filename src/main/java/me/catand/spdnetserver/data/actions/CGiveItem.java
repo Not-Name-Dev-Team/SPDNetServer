@@ -1,6 +1,5 @@
 package me.catand.spdnetserver.data.actions;
 
-import com.alibaba.fastjson2.JSONObject;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,5 +11,6 @@ import me.catand.spdnetserver.data.Data;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CGiveItem extends Data {
-	private JSONObject item;
+	private String targetName;
+	private String item;
 }

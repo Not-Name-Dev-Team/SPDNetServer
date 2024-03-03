@@ -59,6 +59,11 @@ public class Handler {
 	}
 
 	public void handleGiveItem(Player player, CGiveItem cGiveItem) {
+		playerMap.forEach((uuid, player1) -> {
+			if (player1.getName().equals(cGiveItem.getTargetName())) {
+				sender.sendGiveItem(socketService.getServer().getNamespace("/spdnet").getClient(uuid), new SGiveItem(player.getName(), cGiveItem.getItem()));
+			}
+		});
 	}
 
 	public void handleHero(Player player, CHero cHero) {

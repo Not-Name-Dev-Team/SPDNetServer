@@ -84,4 +84,8 @@ public class Sender {
 	public void sendViewHero(SocketIOClient client, SViewHero data) {
 		client.sendEvent(Events.VIEW_HERO.getName(), data);
 	}
+
+	public void sendGiveItem(SocketIOClient client, SGiveItem data) {
+		client.sendEvent(Events.GIVE_ITEM.getName(), data);
+	}
 }
