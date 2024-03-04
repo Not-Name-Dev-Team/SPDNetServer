@@ -29,6 +29,7 @@ public class Handler {
 		log.info("玩家{}获得了成就{}，是否已经获得：{}", player.getName(), cAchievement.getBadgeEnumString(), hasAchievement);
 		if (!hasAchievement) {
 			player.getAchievements().add(cAchievement.getBadgeEnumString());
+			playerRepository.save(player);
 		}
 		sender.sendBroadcastAchievement(new SAchievement(player.getName(), cAchievement.getBadgeEnumString(), hasAchievement));
 	}

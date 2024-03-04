@@ -7,6 +7,7 @@ import lombok.Setter;
 import me.catand.spdnetserver.data.Status;
 
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -59,5 +60,5 @@ public class Player {
 	@CollectionTable(name = "player_achievements", joinColumns = @JoinColumn(name = "player_id"))
 	@Column(name = "achievement")
 	@JSONField(serialize = false)
-	private List<String> achievements;
+	private Set<String> achievements;
 }
