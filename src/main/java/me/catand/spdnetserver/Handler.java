@@ -25,6 +25,12 @@ public class Handler {
 	}
 
 	public void handleAchievement(Player player, CAchievement cAchievement) {
+		boolean hasAchievement = playerRepository.hasAchievement(player.getName(), cAchievement.getBadgeEnumString());
+		log.info("玩家{}获得了成就{}，是否已经获得：{}", player.getName(), cAchievement.getBadgeEnumString(), hasAchievement);
+		if (!hasAchievement) {
+			player.getAchievements().add(cAchievement.getBadgeEnumString());
+		}
+		sender.sendBroadcastAchievement(new SAchievement(player.getName(), cAchievement.getBadgeEnumString(), hasAchievement));
 	}
 
 	public void handleAnkhUsed(Player player, CAnkhUsed cAnkhUsed) {

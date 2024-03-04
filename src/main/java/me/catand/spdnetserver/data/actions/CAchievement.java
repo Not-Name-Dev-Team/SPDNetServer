@@ -11,6 +11,5 @@ import me.catand.spdnetserver.data.Data;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CAchievement extends Data {
-	private String message;
-	private boolean unique;
+	private String badgeEnumString;
 }

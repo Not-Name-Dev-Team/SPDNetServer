@@ -54,4 +54,10 @@ public class Player {
 	@OneToMany(mappedBy = "player")
 	@JSONField(serialize = false)
 	private List<GameRecord> gameRecords;
+
+	@ElementCollection(fetch = FetchType.EAGER)
+	@CollectionTable(name = "player_achievements", joinColumns = @JoinColumn(name = "player_id"))
+	@Column(name = "achievement")
+	@JSONField(serialize = false)
+	private List<String> achievements;
 }
