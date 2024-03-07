@@ -62,7 +62,14 @@ public class Handler {
 	}
 
 	public void handleFloatingText(Player player, CFloatingText cFloatingText) {
-		sender.sendBroadcastFloatingText(new SFloatingText(player.getName(), cFloatingText.getColor(), cFloatingText.getText(), cFloatingText.getIcon()));
+		sender.sendBroadcastFloatingText(new SFloatingText(
+				player.getName(),
+				cFloatingText.getColor(),
+				cFloatingText.getText(),
+				cFloatingText.getIcon(),
+				cFloatingText.getHeroHP(),
+				cFloatingText.getHeroShield(),
+				cFloatingText.getHeroHT()));
 	}
 
 	public void handleGiveItem(Player player, CGiveItem cGiveItem) {
