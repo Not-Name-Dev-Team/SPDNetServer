@@ -1,6 +1,8 @@
 package me.catand.spdnetserver.entitys;
 
+import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
+import com.alibaba.fastjson2.annotation.JSONField;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,53 +14,29 @@ public class GameRecord {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
-	@Transient
-	private Class cause;
-	private String causeClassName;
+	private Long gameID;
+	private String cause;
 	private boolean win;
-	private String heroClass;
-	private int armorTier;
-	private int herolevel;
+	private int score;
+	private String custom_seed;
+	private boolean daily;
+	@JSONField(name="class")
+	private String classValue;
+	private int tier;
+	private int level;
 	private int depth;
 	private boolean ascending;
-	@Transient
-	private JSONObject gameData;
-	private String gameDataString;
-	private String gameID;
-	private int score;
-	private String customSeed;
-	private boolean daily;
 	private String date;
 	private String version;
+	private String gameData;
+	@Transient
+	@JSONField(serialize = false)
+	private JSONObject gameDataObject;
 	@ManyToOne
+	@JSONField(serialize = false)
 	private Player player;
-
-	public void setCause(Class cause) {
-		this.cause = cause;
-		this.causeClassName = (cause != null) ? cause.getName() : null;
-	}
-
-	public Class getCause() {
-		if (cause == null && causeClassName != null) {
-			try {
-				cause = Class.forName(causeClassName);
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
-			}
-		}
-		return cause;
-	}
-
 	public void setGameData(JSONObject gameData) {
-		this.gameData = gameData;
-		this.gameDataString = gameData.toJSONString();
-	}
-
-	public JSONObject getGameData() {
-		if (gameData == null && gameDataString != null) {
-			gameData = JSONObject.parseObject(gameDataString);
-		}
-		return gameData;
+		this.gameData = gameData.toJSONString();
+		this.gameDataObject = JSON.parseObject(this.gameData);
 	}
 }
