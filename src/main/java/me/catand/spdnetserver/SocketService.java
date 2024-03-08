@@ -1,6 +1,7 @@
 package me.catand.spdnetserver;
 
 import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONObject;
 import com.corundumstudio.socketio.Configuration;
 import com.corundumstudio.socketio.HandshakeData;
 import com.corundumstudio.socketio.SocketIONamespace;
@@ -11,6 +12,7 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import me.catand.spdnetserver.data.actions.*;
 import me.catand.spdnetserver.data.events.*;
+import me.catand.spdnetserver.entitys.GameRecord;
 import me.catand.spdnetserver.entitys.Player;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,6 +29,8 @@ public class SocketService {
 	private static SocketService instance;
 	@Autowired
 	private PlayerRepository playerRepository;
+	@Autowired
+	private GameRecordRepository gameRecordRepository;
 	@Autowired
 	private SpdProperties spdProperties;
 	private SocketIOServer server;
@@ -60,7 +64,7 @@ public class SocketService {
 		server.start();
 		startAll();
 		sender = new Sender(server);
-		handler = new Handler(playerRepository, this, sender, playerMap);
+		handler = new Handler(playerRepository, gameRecordRepository, this, sender, playerMap);
 	}
 
 	@PreDestroy
@@ -137,7 +141,9 @@ public class SocketService {
 			handler.handleChatMessage(playerMap.get(client.getSessionId()), JSON.parseObject(data, CChatMessage.class));
 		});
 		spdNetNamespace.addEventListener(Actions.DEATH.getName(), String.class, (client, data, ackSender) -> {
-			handler.handleDeath(playerMap.get(client.getSessionId()), JSON.parseObject(data, CDeath.class));
+			JSONObject cDeathJson = JSON.parseObject(data, JSONObject.class);
+			CDeath death = new CDeath(JSONObject.parseObject(cDeathJson.getString("record"), GameRecord.class));
+			handler.handleDeath(playerMap.get(client.getSessionId()), death);
 		});
 		spdNetNamespace.addEventListener(Actions.ENTER_DUNGEON.getName(), String.class, (client, data, ackSender) -> {
 			handler.handleEnterDungeon(client, playerMap.get(client.getSessionId()), JSON.parseObject(data, CEnterDungeon.class));
@@ -170,7 +176,9 @@ public class SocketService {
 			handler.handleViewHero(playerMap.get(client.getSessionId()), JSON.parseObject(data, CViewHero.class));
 		});
 		spdNetNamespace.addEventListener(Actions.WIN.getName(), String.class, (client, data, ackSender) -> {
-			handler.handleWin(playerMap.get(client.getSessionId()), JSON.parseObject(data, CWin.class));
+			JSONObject cWinJson = JSON.parseObject(data, JSONObject.class);
+			CWin win = new CWin(JSONObject.parseObject(cWinJson.getString("record"), GameRecord.class));
+			handler.handleWin(playerMap.get(client.getSessionId()), win);
 		});
 	}
 }

@@ -12,13 +12,15 @@ import java.util.UUID;
 
 @Slf4j
 public class Handler {
-	private PlayerRepository playerRepository;
+	private final PlayerRepository playerRepository;
+	private final GameRecordRepository gameRecordRepository;
 	private SocketService socketService;
 	private Sender sender;
 	private Map<UUID, Player> playerMap;
 
-	public Handler(PlayerRepository playerRepository, SocketService socketService, Sender sender, Map<UUID, Player> playerMap) {
+	public Handler(PlayerRepository playerRepository, GameRecordRepository gameRecordRepository, SocketService socketService, Sender sender, Map<UUID, Player> playerMap) {
 		this.playerRepository = playerRepository;
+		this.gameRecordRepository = gameRecordRepository;
 		this.socketService = socketService;
 		this.sender = sender;
 		this.playerMap = playerMap;
@@ -46,8 +48,10 @@ public class Handler {
 	}
 
 	public void handleDeath(Player player, CDeath cDeath) {
-		log.info("玩家{}死亡，死因：{}", player.getName(), cDeath.getRecord());
-		sender.sendBroadcastDeath(new SDeath(player.getName(), cDeath.getRecord()));
+		log.info("玩家{}死亡，死因：{}", player.getName(), cDeath.getRecord().getCause());
+		log.info(String.valueOf(cDeath.getRecord().getGameData()));
+
+		gameRecordRepository.save(cDeath.getRecord());
 	}
 
 	public void handleEnterDungeon(SocketIOClient client, Player player, CEnterDungeon cEnterDungeon) {
@@ -116,5 +120,7 @@ public class Handler {
 	}
 
 	public void handleWin(Player player, CWin cWin) {
+		log.info("玩家{}赢得了游戏，分数：{}", player.getName(), cWin.getRecord().getScore());
+		gameRecordRepository.save(cWin.getRecord());
 	}
 }

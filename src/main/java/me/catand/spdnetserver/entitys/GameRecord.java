@@ -1,7 +1,5 @@
 package me.catand.spdnetserver.entitys;
 
-import com.alibaba.fastjson2.JSON;
-import com.alibaba.fastjson2.JSONObject;
 import com.alibaba.fastjson2.annotation.JSONField;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -13,30 +11,29 @@ import lombok.Setter;
 public class GameRecord {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long gameID;
+	@JSONField(serialize = false)
+	private long id;
 	private String cause;
 	private boolean win;
 	private int score;
 	private String custom_seed;
 	private boolean daily;
-	@JSONField(name="class")
-	private String classValue;
+	private String _class;
 	private int tier;
 	private int level;
 	private int depth;
 	private boolean ascending;
 	private String date;
 	private String version;
-	private String gameData;
-	@Transient
+	@OneToOne(cascade = CascadeType.ALL, mappedBy = "gameRecord")
 	@JSONField(serialize = false)
-	private JSONObject gameDataObject;
+	private GameData gameData;
 	@ManyToOne
+	@JoinColumn(name = "player_id")
 	@JSONField(serialize = false)
 	private Player player;
-	public void setGameData(JSONObject gameData) {
-		this.gameData = gameData.toJSONString();
-		this.gameDataObject = JSON.parseObject(this.gameData);
+	public void setGameData(GameData gameData) {
+		this.gameData = gameData;
+		gameData.setGameRecord(this);
 	}
 }

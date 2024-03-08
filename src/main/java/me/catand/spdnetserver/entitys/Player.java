@@ -18,11 +18,13 @@ import java.util.Set;
  * 没有@JSONField(serialize = false)的属性都会在playyerList中发送到其他玩家的客户端
  */
 public class Player {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
 	@Column(unique = true)
-	private long qq;
+	private Long qq;
 
-	@Id
 	@Column(unique = true)
 	private String name;
 
