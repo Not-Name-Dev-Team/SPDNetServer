@@ -20,6 +20,7 @@ import java.util.Set;
 public class Player {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@JSONField(serialize = false)
 	private Long id;
 
 	@Column(unique = true)
