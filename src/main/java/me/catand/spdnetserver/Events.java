@@ -9,6 +9,7 @@ import lombok.Getter;
 public enum Events {
 	ACHIEVEMENT("achievement"),
 	ANKH_USED("ankhUsed"),
+	ARMOR_UPDATE("armorUpdate"),
 	CHAT_MESSAGE("chatMessage"),
 	DEATH("death"),
 	ENTER_DUNGEON("enterDungeon"),

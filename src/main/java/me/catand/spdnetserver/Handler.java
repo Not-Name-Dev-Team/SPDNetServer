@@ -40,6 +40,8 @@ public class Handler {
 	}
 
 	public void handleArmorUpdate(Player player, CArmorUpdate cArmorUpdate) {
+		log.info("玩家{}装备了{}级护甲", player.getName(), cArmorUpdate.getArmorTier());
+		sender.sendBroadcastArmorUpdate(new SArmorUpdate(player.getName(), cArmorUpdate.getArmorTier()));
 	}
 
 	public void handleChatMessage(Player player, CChatMessage cChatMessage) {

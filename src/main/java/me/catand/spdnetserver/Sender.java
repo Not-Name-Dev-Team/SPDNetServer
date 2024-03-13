@@ -16,6 +16,12 @@ public class Sender {
 	public void sendBroadcastAchievement(SAchievement data) {
 		server.getBroadcastOperations().sendEvent(Events.ACHIEVEMENT.getName(), data);
 	}
+	public void sendBroadcastAnkhUsed(SAnkhUsed data) {
+		server.getBroadcastOperations().sendEvent(Events.ANKH_USED.getName(), data);
+	}
+	public void sendBroadcastArmorUpdate(SArmorUpdate data) {
+		server.getBroadcastOperations().sendEvent(Events.ARMOR_UPDATE.getName(), data);
+	}
 
 	public void sendBroadcastChatMessage(SChatMessage sChatMessage) {
 		server.getBroadcastOperations().sendEvent(Events.CHAT_MESSAGE.getName(), sChatMessage);
