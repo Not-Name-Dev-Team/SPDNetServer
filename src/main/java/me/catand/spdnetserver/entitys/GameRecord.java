@@ -11,8 +11,11 @@ import lombok.Setter;
 public class GameRecord {
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@JSONField(serialize = false)
 	private long id;
+	@JSONField(serialize = false)
+	private int gameMode;
 	private String cause;
 	private boolean win;
 	private int score;

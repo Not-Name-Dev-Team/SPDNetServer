@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import me.catand.spdnetserver.data.Status;
 import me.catand.spdnetserver.data.actions.*;
 import me.catand.spdnetserver.data.events.*;
+import me.catand.spdnetserver.entitys.GameRecord;
 import me.catand.spdnetserver.entitys.Player;
 
 import java.util.Map;
@@ -51,9 +52,10 @@ public class Handler {
 
 	public void handleDeath(Player player, CDeath cDeath) {
 		log.info("玩家{}死亡，死因：{}", player.getName(), cDeath.getRecord().getCause());
-		log.info(String.valueOf(cDeath.getRecord().getGameData()));
-
-		gameRecordRepository.save(cDeath.getRecord());
+		GameRecord gameRecord = cDeath.getRecord();
+		gameRecord.setGameMode(player.getStatus().getGameMode());
+		gameRecord.setPlayer(player);
+		gameRecordRepository.save(gameRecord);
 	}
 
 	public void handleEnterDungeon(SocketIOClient client, Player player, CEnterDungeon cEnterDungeon) {
@@ -123,6 +125,9 @@ public class Handler {
 
 	public void handleWin(Player player, CWin cWin) {
 		log.info("玩家{}赢得了游戏，分数：{}", player.getName(), cWin.getRecord().getScore());
-		gameRecordRepository.save(cWin.getRecord());
+		GameRecord gameRecord = cWin.getRecord();
+		gameRecord.setGameMode(player.getStatus().getGameMode());
+		gameRecord.setPlayer(player);
+		gameRecordRepository.save(gameRecord);
 	}
 }
