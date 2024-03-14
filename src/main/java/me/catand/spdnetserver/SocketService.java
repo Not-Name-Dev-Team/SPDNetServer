@@ -57,6 +57,7 @@ public class SocketService {
 		config.setHostname("0.0.0.0");
 		config.setPort(21687);
 
+		instance = this;
 		server = new SocketIOServer(config);
 		spdNetNamespace = server.addNamespace("/spdnet");
 		seeds.put("seed1", 114514L);

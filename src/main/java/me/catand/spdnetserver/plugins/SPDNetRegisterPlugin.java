@@ -23,23 +23,26 @@ public class SPDNetRegisterPlugin extends BotPlugin {
 
 	@Override
 	public int onGroupMessage(Bot bot, GroupMessageEvent event) {
+		if (!event.getRawMessage().contains("地牢注册")){
+			return MESSAGE_IGNORE;
+		}
 		MsgUtils sendMsg = new MsgUtils();
 		List<String> arrayMsg = event.getArrayMsg().stream()
 				.filter(msg -> msg.getType() == MsgTypeEnum.text)
 				.map(ArrayMsg::getData)
 				.map(map -> map.get("text"))
 				.map(map -> map.replaceAll("\\s+", " "))
-				.filter(text -> text.startsWith(" /地牢注册"))
+				.filter(text -> text.startsWith("地牢注册"))
 				.toList();
-		String[] args = arrayMsg.getFirst().split("/")[1].split(" ");
-		if (args.length < 3) {
-			sendMsg.text("参数错误, 正确格式\n地牢注册 [用户名] [qq号]");
+		String[] args = arrayMsg.getFirst().split(" ");
+		if (args.length < 2) {
+			sendMsg.text("参数错误, 正确格式\n地牢注册 [用户名]");
 			bot.sendGroupMsg(event.getGroupId(), sendMsg.build(), false);
 			return MESSAGE_BLOCK;
 		}
 		long qq;
 		try {
-			qq = Long.parseLong(args[2]);
+			qq = event.getUserId();
 		} catch (Exception e) {
 			sendMsg.text("你这QQ不太行 :/\n" + args[2]);
 			bot.sendGroupMsg(event.getGroupId(), sendMsg.build(), false);
