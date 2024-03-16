@@ -16,19 +16,17 @@ public class Sender {
 	public void sendBroadcastAchievement(SAchievement data) {
 		server.getBroadcastOperations().sendEvent(Events.ACHIEVEMENT.getName(), data);
 	}
+
 	public void sendBroadcastAnkhUsed(SAnkhUsed data) {
 		server.getBroadcastOperations().sendEvent(Events.ANKH_USED.getName(), data);
 	}
+
 	public void sendBroadcastArmorUpdate(SArmorUpdate data) {
 		server.getBroadcastOperations().sendEvent(Events.ARMOR_UPDATE.getName(), data);
 	}
 
 	public void sendBroadcastChatMessage(SChatMessage sChatMessage) {
 		server.getBroadcastOperations().sendEvent(Events.CHAT_MESSAGE.getName(), sChatMessage);
-	}
-
-	public void sendBroadcastDeath(SDeath data) {
-		server.getBroadcastOperations().sendEvent(Events.DEATH.getName(), data);
 	}
 
 	public void sendBroadcastEnterDungeon(SEnterDungeon data) {
@@ -51,6 +49,10 @@ public class Sender {
 		server.getBroadcastOperations().sendEvent(Events.FLOATING_TEXT.getName(), data);
 	}
 
+	public void sendBroadcastGameEnd(SGameEnd data) {
+		server.getBroadcastOperations().sendEvent(Events.GAME_END.getName(), data);
+	}
+
 	public void sendBroadcastJoin(SJoin data) {
 		server.getBroadcastOperations().sendEvent(Events.JOIN.getName(), data);
 	}
@@ -69,10 +71,6 @@ public class Sender {
 
 	public void sendBroadcastServerMessage(SServerMessage data) {
 		server.getBroadcastOperations().sendEvent(Events.SERVER_MESSAGE.getName(), data);
-	}
-
-	public void sendBroadcastWin(SWin data) {
-		server.getBroadcastOperations().sendEvent(Events.WIN.getName(), data);
 	}
 
 	public void sendInit(SocketIOClient client, SInit data) {

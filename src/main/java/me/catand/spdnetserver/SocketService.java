@@ -141,11 +141,6 @@ public class SocketService {
 		spdNetNamespace.addEventListener(Actions.CHAT_MESSAGE.getName(), String.class, (client, data, ackSender) -> {
 			handler.handleChatMessage(playerMap.get(client.getSessionId()), JSON.parseObject(data, CChatMessage.class));
 		});
-		spdNetNamespace.addEventListener(Actions.DEATH.getName(), String.class, (client, data, ackSender) -> {
-			JSONObject cDeathJson = JSON.parseObject(data, JSONObject.class);
-			CDeath death = new CDeath(JSONObject.parseObject(cDeathJson.getString("record"), GameRecord.class));
-			handler.handleDeath(playerMap.get(client.getSessionId()), death);
-		});
 		spdNetNamespace.addEventListener(Actions.ENTER_DUNGEON.getName(), String.class, (client, data, ackSender) -> {
 			handler.handleEnterDungeon(client, playerMap.get(client.getSessionId()), JSON.parseObject(data, CEnterDungeon.class));
 		});
@@ -154,6 +149,11 @@ public class SocketService {
 		});
 		spdNetNamespace.addEventListener(Actions.FLOATING_TEXT.getName(), String.class, (client, data, ackSender) -> {
 			handler.handleFloatingText(playerMap.get(client.getSessionId()), JSON.parseObject(data, CFloatingText.class));
+		});
+		spdNetNamespace.addEventListener(Actions.GAME_END.getName(), String.class, (client, data, ackSender) -> {
+			JSONObject cGameEndJson = JSON.parseObject(data, JSONObject.class);
+			CGameEnd gameEnd = new CGameEnd(JSONObject.parseObject(cGameEndJson.getString("record"), GameRecord.class));
+			handler.handleGameEnd(playerMap.get(client.getSessionId()), gameEnd);
 		});
 		spdNetNamespace.addEventListener(Actions.GIVE_ITEM.getName(), String.class, (client, data, ackSender) -> {
 			handler.handleGiveItem(playerMap.get(client.getSessionId()), JSON.parseObject(data, CGiveItem.class));
@@ -176,10 +176,6 @@ public class SocketService {
 		spdNetNamespace.addEventListener(Actions.VIEW_HERO.getName(), String.class, (client, data, ackSender) -> {
 			handler.handleViewHero(playerMap.get(client.getSessionId()), JSON.parseObject(data, CViewHero.class));
 		});
-		spdNetNamespace.addEventListener(Actions.WIN.getName(), String.class, (client, data, ackSender) -> {
-			JSONObject cWinJson = JSON.parseObject(data, JSONObject.class);
-			CWin win = new CWin(JSONObject.parseObject(cWinJson.getString("record"), GameRecord.class));
-			handler.handleWin(playerMap.get(client.getSessionId()), win);
-		});
+
 	}
 }

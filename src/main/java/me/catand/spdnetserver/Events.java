@@ -11,11 +11,11 @@ public enum Events {
 	ANKH_USED("ankhUsed"),
 	ARMOR_UPDATE("armorUpdate"),
 	CHAT_MESSAGE("chatMessage"),
-	DEATH("death"),
 	ENTER_DUNGEON("enterDungeon"),
 	ERROR("error"),
 	EXIT("exit"),
 	FLOATING_TEXT("floatingText"),
+	GAME_END("gameEnd"),
 	GIVE_ITEM("giveItem"),
 	HERO("hero"),
 	INIT("init"),
@@ -25,8 +25,7 @@ public enum Events {
 	PLAYER_LIST("playerList"),
 	PLAYER_MOVE("playerMove"),
 	SERVER_MESSAGE("serverMessage"),
-	VIEW_HERO("viewHero"),
-	WIN("win");
+	VIEW_HERO("viewHero");
 
 
 	private final String name;

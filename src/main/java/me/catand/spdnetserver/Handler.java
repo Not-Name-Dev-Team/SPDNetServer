@@ -50,14 +50,6 @@ public class Handler {
 		sender.sendBroadcastChatMessage(new SChatMessage(player.getName(), cChatMessage.getMessage()));
 	}
 
-	public void handleDeath(Player player, CDeath cDeath) {
-		log.info("玩家{}死亡，死因：{}", player.getName(), cDeath.getRecord().getCause());
-		GameRecord gameRecord = cDeath.getRecord();
-		gameRecord.setGameMode(player.getStatus().getGameMode());
-		gameRecord.setPlayer(player);
-		gameRecordRepository.save(gameRecord);
-	}
-
 	public void handleEnterDungeon(SocketIOClient client, Player player, CEnterDungeon cEnterDungeon) {
 		Status status = cEnterDungeon.getStatus();
 		player.setStatus(status);
@@ -78,6 +70,13 @@ public class Handler {
 				cFloatingText.getHeroHP(),
 				cFloatingText.getHeroShield(),
 				cFloatingText.getHeroHT()));
+	}
+
+	public void handleGameEnd(Player player, CGameEnd cGameEnd) {
+		log.info("玩家{}{}了游戏，分数：{}", player.getName(), cGameEnd.getRecord().isWin() ? "通关" : "结束", cGameEnd.getRecord().getTotalScore());
+		GameRecord gameRecord = cGameEnd.getRecord();
+		gameRecord.setPlayer(player);
+		gameRecordRepository.save(gameRecord);
 	}
 
 	public void handleGiveItem(Player player, CGiveItem cGiveItem) {
@@ -121,13 +120,5 @@ public class Handler {
 				sender.sendViewHero(socketService.getServer().getNamespace("/spdnet").getClient(uuid), new SViewHero(player.getName()));
 			}
 		});
-	}
-
-	public void handleWin(Player player, CWin cWin) {
-		log.info("玩家{}赢得了游戏，分数：{}", player.getName(), cWin.getRecord().getScore());
-		GameRecord gameRecord = cWin.getRecord();
-		gameRecord.setGameMode(player.getStatus().getGameMode());
-		gameRecord.setPlayer(player);
-		gameRecordRepository.save(gameRecord);
 	}
 }

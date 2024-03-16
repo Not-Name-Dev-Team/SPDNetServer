@@ -12,11 +12,11 @@ import me.catand.spdnetserver.entitys.GameRecord;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class SDeath extends Data {
+public class SGameEnd extends Data {
 	private String name;
 	private String record;
 
-	public SDeath(String name, GameRecord record) {
+	public SGameEnd(String name, GameRecord record) {
 		this.name = name;
 		this.record = JSON.toJSONString(record);
 	}

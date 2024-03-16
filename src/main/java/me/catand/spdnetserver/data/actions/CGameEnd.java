@@ -11,6 +11,6 @@ import me.catand.spdnetserver.entitys.GameRecord;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CDeath extends Data {
+public class CGameEnd extends Data {
 	private GameRecord record;
 }

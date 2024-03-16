@@ -11,18 +11,17 @@ public enum Actions {
 	ANKH_USED("ankhUsed"),
 	ARMOR_UPDATE("armorUpdate"),
 	CHAT_MESSAGE("chatMessage"),
-	DEATH("death"),
 	ENTER_DUNGEON("enterDungeon"),
 	ERROR("error"),
 	FLOATING_TEXT("floatingText"),
+	GAME_END("gameEnd"),
 	GIVE_ITEM("giveItem"),
 	HERO("hero"),
 	LEAVE_DUNGEON("leaveDungeon"),
 	PLAYER_CHANGE_FLOOR("playerChangeFloor"),
 	PLAYER_MOVE("playerMove"),
 	REQUEST_PLAYER_LIST("requestPlayerList"),
-	VIEW_HERO("viewHero"),
-	WIN("win");
+	VIEW_HERO("viewHero");
 	private final String name;
 
 	Actions(String name) {

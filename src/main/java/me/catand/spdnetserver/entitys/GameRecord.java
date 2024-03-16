@@ -14,29 +14,79 @@ public class GameRecord {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@JSONField(serialize = false)
 	private long id;
-	@JSONField(serialize = false)
-	private int gameMode;
 	private String cause;
 	private boolean win;
 	private int score;
-	private String custom_seed;
-	private boolean daily;
-	private String _class;
+	@JSONField(name = "class")
+	private String heroClass;
 	private int tier;
 	private int level;
 	private int depth;
 	private boolean ascending;
 	private String date;
 	private String version;
-	@OneToOne(cascade = CascadeType.ALL, mappedBy = "gameRecord")
-	@JSONField(serialize = false)
-	private GameData gameData;
+	@JSONField(name = "net_version")
+	private String netVersion;
+	@JSONField(name = "game_mode")
+	private String gameMode;
+
+	private String hero;
+	private String badges;
+	private String handlers;
+	private String challenges;
+	@JSONField(name = "game_version")
+	private int gameVersion;
+	private long seed;
+	@JSONField(name = "custom_seed")
+	private String customSeed;
+	private boolean daily;
+	private boolean dailyReplay;
+
+	private int gold;
+	private int maxDepth;
+	private int maxAscent;
+	private int enemiesSlain;
+	private int foodEaten;
+	private int potionsCooked;
+	private int priranhas;
+	private int ankhsUsed;
+	@JSONField(name = "prog_score")
+	private int progScore;
+	@JSONField(name = "item_val")
+	private int itemVal;
+	@JSONField(name = "tres_score")
+	private int tresScore;
+	@JSONField(name = "flr_expl")
+	private String flrExpl;
+	@JSONField(name = "expl_score")
+	private int explScore;
+	@JSONField(name = "boss_scores")
+	private int[] bossScores;
+	@JSONField(name = "tot_boss")
+	private int totBoss;
+	@JSONField(name = "quest_scores")
+	private int[] questScores;
+	@JSONField(name = "tot_quest")
+	private int totQuest;
+	@JSONField(name = "win_mult")
+	private float winMult;
+	@JSONField(name = "chal_mult")
+	private float chalMult;
+	@JSONField(name = "total_score")
+	private int totalScore;
+	private int upgradesUsed;
+	private int sneakAttacks;
+	private int thrownAssists;
+	private int spawnersAlive;
+	private int duration;
+	private boolean qualifiedForNoKilling;
+	private boolean qualifiedForBossRemainsBadge;
+	private boolean qualifiedForBossChallengeBadge;
+	private boolean amuletObtained;
+	private boolean won;
+	private boolean ascended;
 	@ManyToOne
 	@JoinColumn(name = "player_id")
 	@JSONField(serialize = false)
 	private Player player;
-	public void setGameData(GameData gameData) {
-		this.gameData = gameData;
-		gameData.setGameRecord(this);
-	}
 }
