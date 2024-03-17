@@ -170,6 +170,9 @@ public class SocketService {
 		spdNetNamespace.addEventListener(Actions.PLAYER_MOVE.getName(), String.class, (client, data, ackSender) -> {
 			handler.handlePlayerMove(playerMap.get(client.getSessionId()), JSON.parseObject(data, CPlayerMove.class));
 		});
+		spdNetNamespace.addEventListener(Actions.REQUEST_LEADERBOARD.getName(), String.class, (client, data, ackSender) -> {
+			handler.handleRequestLeaderboard(client, JSON.parseObject(data, CRequestLeaderboard.class));
+		});
 		spdNetNamespace.addEventListener(Actions.REQUEST_PLAYER_LIST.getName(), String.class, (client, data, ackSender) -> {
 			handler.handleRequestPlayerList(client, JSON.parseObject(data, CRequestPlayerList.class));
 		});
