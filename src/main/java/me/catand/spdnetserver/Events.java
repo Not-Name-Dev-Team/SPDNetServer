@@ -20,6 +20,7 @@ public enum Events {
 	HERO("hero"),
 	INIT("init"),
 	JOIN("join"),
+	LEADERBOARD("leaderboard"),
 	LEAVE_DUNGEON("leaveDungeon"),
 	PLAYER_CHANGE_FLOOR("playerChangeFloor"),
 	PLAYER_LIST("playerList"),

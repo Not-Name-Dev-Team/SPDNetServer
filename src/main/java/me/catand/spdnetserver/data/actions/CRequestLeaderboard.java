@@ -10,14 +10,18 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CRequestLeaderboard {
-	// 排行榜类型
-	private String leaderboardType; // "global", "personal"
-	// 排序方式
-	private String sortCriteria; // "totalScore", "clearTime", "latest"
+	// 筛选指定玩家
+	private String playerName;
 	// 无挑战筛选的时候值为 999
-	private int challengeCount;
+	private Integer challengeCount;
 	// 只显示通关了的的记录
-	private boolean winOnly;
+	private Boolean winOnly;
 	// 游戏模式 不筛选选择 ALL
 	private String gameMode;
+	// 排序方式
+	private String sortCriteria; // "score", "duration", "id"
+	// 排行榜的第几页
+	private int page;
+	// 排行榜的每页有多少名
+	private int amountPerPage;
 }

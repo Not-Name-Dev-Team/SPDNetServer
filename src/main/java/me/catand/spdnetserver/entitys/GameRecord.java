@@ -3,11 +3,14 @@ package me.catand.spdnetserver.entitys;
 import com.alibaba.fastjson2.annotation.JSONField;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import me.catand.spdnetserver.Challenges;
 
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
 public class GameRecord {
 
 	@Id
@@ -33,7 +36,9 @@ public class GameRecord {
 	private String hero;
 	private String badges;
 	private String handlers;
-	private String challenges;
+	private int challenges;
+	@JSONField(serialize = false, name = "challenge_amount")
+	private int challengeAmount;
 	@JSONField(name = "game_version")
 	private int gameVersion;
 	private long seed;
@@ -89,4 +94,12 @@ public class GameRecord {
 	@JoinColumn(name = "player_id")
 	@JSONField(serialize = false)
 	private Player player;
+	@Transient
+	@JSONField(name = "player_name")
+	private String playerName;
+
+	public void setchallenges(int challenges) {
+		this.challenges = challenges;
+		this.challengeAmount = Challenges.countActiveChallenges(challenges);
+	}
 }

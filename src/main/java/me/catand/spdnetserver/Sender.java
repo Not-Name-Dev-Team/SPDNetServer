@@ -92,4 +92,8 @@ public class Sender {
 	public void sendGiveItem(SocketIOClient client, SGiveItem data) {
 		client.sendEvent(Events.GIVE_ITEM.getName(), data);
 	}
+
+	public void sendLeaderboard(SocketIOClient client, SLeaderboard data) {
+		client.sendEvent(Events.LEADERBOARD.getName(), data);
+	}
 }

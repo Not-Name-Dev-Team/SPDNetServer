@@ -7,7 +7,12 @@ import me.catand.spdnetserver.data.actions.*;
 import me.catand.spdnetserver.data.events.*;
 import me.catand.spdnetserver.entitys.GameRecord;
 import me.catand.spdnetserver.entitys.Player;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -110,6 +115,29 @@ public class Handler {
 
 	public void handleRequestLeaderboard(SocketIOClient client, CRequestLeaderboard cRequestLeaderboard) {
 		log.info("玩家{}请求了排行榜", playerMap.get(client.getSessionId()).getName());
+
+		if (cRequestLeaderboard.getSortCriteria() == null) {
+			cRequestLeaderboard.setSortCriteria("id");
+		}
+		Sort sort = Sort.by(Sort.Direction.DESC, cRequestLeaderboard.getSortCriteria());
+		Pageable pageable = PageRequest.of(cRequestLeaderboard.getPage(), cRequestLeaderboard.getAmountPerPage(), sort);
+
+		Page<GameRecord> page = gameRecordRepository.findWithFilters(
+				cRequestLeaderboard.getPlayerName(),
+				cRequestLeaderboard.getWinOnly(),
+				cRequestLeaderboard.getGameMode(),
+				cRequestLeaderboard.getChallengeCount(),
+				pageable
+		);
+		// 显示第1页 共有10页 共有100条记录
+		log.info("显示第{}页 共有{}页 共有{}条记录", page.getNumber() + 1, page.getTotalPages(), page.getTotalElements());
+		int totalPages = page.getTotalPages();
+		int currentPage = page.getNumber() + 1;
+		int totalElements = (int) page.getTotalElements();
+		List<GameRecord> gameRecords = page.getContent();
+		gameRecords.forEach(gameRecord -> gameRecord.setPlayerName(gameRecord.getPlayer().getName()));
+		List<String> gameRecordsString = gameRecords.stream().map(GameRecord::toString).toList();
+		sender.sendLeaderboard(client, new SLeaderboard(totalPages, currentPage, totalElements, gameRecordsString));
 	}
 
 	public void handleRequestPlayerList(SocketIOClient client, CRequestPlayerList cRequestPlayerList) {
