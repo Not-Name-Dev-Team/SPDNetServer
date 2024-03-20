@@ -16,7 +16,7 @@ public class CRequestLeaderboard {
 	private Integer challengeCount;
 	// 只显示通关了的的记录
 	private Boolean winOnly;
-	// 游戏模式 不筛选选择 ALL
+	// 游戏模式
 	private String gameMode;
 	// 排序方式
 	private String sortCriteria; // "score", "duration", "id"
