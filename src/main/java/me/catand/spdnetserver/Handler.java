@@ -1,5 +1,6 @@
 package me.catand.spdnetserver;
 
+import com.alibaba.fastjson2.JSON;
 import com.corundumstudio.socketio.SocketIOClient;
 import lombok.extern.slf4j.Slf4j;
 import me.catand.spdnetserver.data.Status;
@@ -114,13 +115,11 @@ public class Handler {
 	}
 
 	public void handleRequestLeaderboard(SocketIOClient client, CRequestLeaderboard cRequestLeaderboard) {
-		log.info("玩家{}请求了排行榜", playerMap.get(client.getSessionId()).getName());
-
 		if (cRequestLeaderboard.getSortCriteria() == null) {
 			cRequestLeaderboard.setSortCriteria("id");
 		}
 		Sort sort = Sort.by(Sort.Direction.DESC, cRequestLeaderboard.getSortCriteria());
-		Pageable pageable = PageRequest.of(cRequestLeaderboard.getPage(), cRequestLeaderboard.getAmountPerPage(), sort);
+		Pageable pageable = PageRequest.of(cRequestLeaderboard.getPage() - 1, cRequestLeaderboard.getAmountPerPage(), sort);
 
 		Page<GameRecord> page = gameRecordRepository.findWithFilters(
 				cRequestLeaderboard.getPlayerName(),
@@ -130,13 +129,15 @@ public class Handler {
 				pageable
 		);
 		// 显示第1页 共有10页 共有100条记录
-		log.info("显示第{}页 共有{}页 共有{}条记录", page.getNumber() + 1, page.getTotalPages(), page.getTotalElements());
+		log.info("玩家{}请求了排行榜, 显示第{}页 共有{}页 共有{}条记录", playerMap.get(client.getSessionId()).getName(), page.getNumber(), page.getTotalPages(), page.getTotalElements());
 		int totalPages = page.getTotalPages();
-		int currentPage = page.getNumber() + 1;
+		int currentPage = page.getNumber();
 		int totalElements = (int) page.getTotalElements();
 		List<GameRecord> gameRecords = page.getContent();
-		gameRecords.forEach(gameRecord -> gameRecord.setPlayerName(gameRecord.getPlayer().getName()));
-		List<String> gameRecordsString = gameRecords.stream().map(GameRecord::toString).toList();
+		gameRecords.forEach(gameRecord -> {
+			gameRecord.setPlayerName(gameRecord.getPlayer().getName());
+		});
+		List<String> gameRecordsString = gameRecords.stream().map(JSON::toJSONString).toList();
 		sender.sendLeaderboard(client, new SLeaderboard(totalPages, currentPage, totalElements, gameRecordsString));
 	}
 
