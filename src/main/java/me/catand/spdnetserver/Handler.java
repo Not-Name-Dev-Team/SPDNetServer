@@ -138,7 +138,7 @@ public class Handler {
 			gameRecord.setPlayerName(gameRecord.getPlayer().getName());
 		});
 		List<String> gameRecordsString = gameRecords.stream().map(JSON::toJSONString).toList();
-		sender.sendLeaderboard(client, new SLeaderboard(totalPages, currentPage, totalElements, gameRecordsString));
+		sender.sendLeaderboard(client, new SLeaderboard(totalPages, currentPage + 1, totalElements, gameRecordsString));
 	}
 
 	public void handleRequestPlayerList(SocketIOClient client, CRequestPlayerList cRequestPlayerList) {
