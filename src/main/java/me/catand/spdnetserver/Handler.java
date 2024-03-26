@@ -44,6 +44,7 @@ public class Handler {
 	}
 
 	public void handleAnkhUsed(Player player, CAnkhUsed cAnkhUsed) {
+		sender.sendBroadcastAnkhUsed(new SAnkhUsed(player.getName(), cAnkhUsed.getCause(), cAnkhUsed.getUnusedBlessedAnkh(), cAnkhUsed.getUnusedUnblessedAnkh()));
 	}
 
 	public void handleArmorUpdate(Player player, CArmorUpdate cArmorUpdate) {
