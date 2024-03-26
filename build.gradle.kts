@@ -1,6 +1,6 @@
 plugins {
     java
-    id("org.springframework.boot") version "3.2.3"
+    id("org.springframework.boot") version "3.2.4"
     id("io.spring.dependency-management") version "1.1.4"
 }
 
@@ -25,22 +25,22 @@ repositories {
 }
 
 dependencies {
-    implementation("org.springframework.boot:spring-boot-starter:3.2.2")
+    implementation("org.springframework.boot:spring-boot-starter:3.2.4")
 
     // Lombok
     compileOnly("org.projectlombok:lombok:1.18.30")
     annotationProcessor("org.projectlombok:lombok:1.18.30")
 
     // Shiro
-    implementation("com.mikuac:shiro:2.1.7")
+    implementation("com.mikuac:shiro:2.2.0")
 
     // Database
-    implementation("org.springframework.boot:spring-boot-starter-data-jpa:3.2.2")
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa:3.2.4")
     implementation("org.xerial:sqlite-jdbc:3.45.1.0")
     implementation("org.hibernate.orm:hibernate-community-dialects:6.3.1.Final")
 
     // Fastjson
-    implementation("com.alibaba:fastjson:2.0.47")
+    implementation("com.alibaba:fastjson:2.0.48")
 
     // Socket.io
     implementation("com.corundumstudio.socketio:netty-socketio:2.0.8")
