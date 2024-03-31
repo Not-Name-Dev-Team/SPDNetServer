@@ -14,7 +14,10 @@ import me.catand.spdnetserver.data.actions.*;
 import me.catand.spdnetserver.data.events.*;
 import me.catand.spdnetserver.entitys.GameRecord;
 import me.catand.spdnetserver.entitys.Player;
+import me.catand.spdnetserver.repositories.GameRecordRepository;
+import me.catand.spdnetserver.repositories.PlayerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.LinkedHashMap;
@@ -60,8 +63,9 @@ public class SocketService {
 		instance = this;
 		server = new SocketIOServer(config);
 		spdNetNamespace = server.addNamespace("/spdnet");
-		seeds.put("seed1", 114514L);
-		seeds.put("seed2", 114515L);
+		if (seeds.isEmpty()) {
+			seeds.put("seedFUN", System.currentTimeMillis());
+		}
 		server.start();
 		startAll();
 		sender = new Sender(server);
@@ -180,5 +184,14 @@ public class SocketService {
 			handler.handleViewHero(playerMap.get(client.getSessionId()), JSON.parseObject(data, CViewHero.class));
 		});
 
+	}
+
+	/**
+	 * 定时更改种子
+	 */
+	@Scheduled(cron = "0 30 0 * * ?")
+	public void doSomething() {
+		seeds.clear();
+		seeds.put("seedFUN", System.currentTimeMillis());
 	}
 }

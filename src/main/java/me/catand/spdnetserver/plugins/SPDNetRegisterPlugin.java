@@ -7,7 +7,7 @@ import com.mikuac.shiro.dto.event.message.GroupMessageEvent;
 import com.mikuac.shiro.enums.MsgTypeEnum;
 import com.mikuac.shiro.model.ArrayMsg;
 import me.catand.spdnetserver.MailSender;
-import me.catand.spdnetserver.PlayerRepository;
+import me.catand.spdnetserver.repositories.PlayerRepository;
 import me.catand.spdnetserver.entitys.Player;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

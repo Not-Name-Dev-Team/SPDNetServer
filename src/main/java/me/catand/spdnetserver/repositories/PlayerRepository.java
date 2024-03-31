@@ -1,4 +1,4 @@
-package me.catand.spdnetserver;
+package me.catand.spdnetserver.repositories;
 
 import me.catand.spdnetserver.entitys.Player;
 import org.springframework.data.jpa.repository.JpaRepository;
