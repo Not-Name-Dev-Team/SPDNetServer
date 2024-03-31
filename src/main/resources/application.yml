@@ -1,6 +1,10 @@
 server:
   port: 15447
 shiro:
+  ws:
+    server:
+      enable: true
+      url: "/ws/shiro"
   plugin-list:
     - me.catand.spdnetserver.plugins.LogPlugin
     - me.catand.spdnetserver.plugins.SPDNetRegisterPlugin
