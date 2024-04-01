@@ -19,5 +19,5 @@ spring:
         dialect: org.hibernate.community.dialect.SQLiteDialect
 spd:
   version: 2.3.2
-  netVersion: 0.0.1
+  netVersion: 0.0.2
   motd: 欢迎  :D
