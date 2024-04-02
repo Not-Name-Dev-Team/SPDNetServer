@@ -121,7 +121,12 @@ public class Handler {
 		if (cRequestLeaderboard.getSortCriteria() == null) {
 			cRequestLeaderboard.setSortCriteria("id");
 		}
-		Sort sort = Sort.by(Sort.Direction.DESC, cRequestLeaderboard.getSortCriteria());
+		Sort sort;
+		if (cRequestLeaderboard.getSortCriteria().equals("duration")) {
+			sort = Sort.by(Sort.Direction.ASC, cRequestLeaderboard.getSortCriteria());
+		} else {
+			sort = Sort.by(Sort.Direction.DESC, cRequestLeaderboard.getSortCriteria());
+		}
 		Pageable pageable = PageRequest.of(cRequestLeaderboard.getPage() - 1, cRequestLeaderboard.getAmountPerPage(), sort);
 
 		Page<GameRecord> page = gameRecordRepository.findWithFilters(
