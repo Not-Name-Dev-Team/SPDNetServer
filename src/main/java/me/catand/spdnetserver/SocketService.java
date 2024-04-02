@@ -20,6 +20,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -64,7 +67,7 @@ public class SocketService {
 		server = new SocketIOServer(config);
 		spdNetNamespace = server.addNamespace("/spdnet");
 		if (seeds.isEmpty()) {
-			seeds.put("seedFUN", System.currentTimeMillis());
+			seeds.put("seedFUN", getNoonTimestamp());
 		}
 		server.start();
 		startAll();
@@ -192,6 +195,12 @@ public class SocketService {
 	@Scheduled(cron = "0 30 0 * * ?")
 	public void doSomething() {
 		seeds.clear();
-		seeds.put("seedFUN", System.currentTimeMillis());
+		seeds.put("seedFUN", getNoonTimestamp());
+	}
+
+	private long getNoonTimestamp() {
+		LocalDateTime todayNoon = LocalDateTime.now(ZoneId.of("Asia/Shanghai")).withHour(12).withMinute(0).withSecond(0).withNano(0);
+		ZonedDateTime zdt = todayNoon.atZone(ZoneId.of("Asia/Shanghai"));
+		return zdt.toInstant().toEpochMilli();
 	}
 }
