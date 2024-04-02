@@ -86,6 +86,7 @@ public class Handler {
 		GameRecord gameRecord = cGameEnd.getRecord();
 		gameRecord.setPlayer(player);
 		gameRecordRepository.save(gameRecord);
+		sender.sendBroadcastGameEnd(new SGameEnd(player.getName(), gameRecord));
 	}
 
 	public void handleGiveItem(Player player, CGiveItem cGiveItem) {
