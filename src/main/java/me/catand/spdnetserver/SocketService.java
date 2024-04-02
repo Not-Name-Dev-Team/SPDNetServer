@@ -105,7 +105,7 @@ public class SocketService {
 				client.disconnect();
 			} else if (!(spdProperties.getVersion().equals(spdVersion) && (spdProperties.getNetVersion().equals(netVersion) || netVersion.equals(spdProperties.getNetVersion() + "-INDEV")))) {
 				client.sendEvent(Events.ERROR.getName(), new SError("版本不匹配"));
-				log.info("连接失败: 版本不匹配, SPDVersion: " + spdVersion + ", NetVersion: " + netVersion + ", " + client.getSessionId());
+				log.info("连接失败: 版本不匹配, 破碎版本: " + spdVersion + ", Net版本: " + netVersion + ", " + client.getSessionId());
 				client.disconnect();
 			} else {
 				Player player = playerRepository.findByKey(authToken);
