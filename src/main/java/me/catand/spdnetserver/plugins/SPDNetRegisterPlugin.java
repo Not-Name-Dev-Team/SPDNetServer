@@ -35,7 +35,7 @@ public class SPDNetRegisterPlugin extends BotPlugin {
 				.filter(text -> text.startsWith("地牢注册"))
 				.toList();
 		String[] args = arrayMsg.getFirst().split(" ");
-		if (args.length < 2) {
+		if (!args[0].equals("地牢注册") || args.length < 2) {
 			sendMsg.text("参数错误, 正确格式\n地牢注册 [用户名]");
 			bot.sendGroupMsg(event.getGroupId(), sendMsg.build(), false);
 			return MESSAGE_BLOCK;
@@ -61,14 +61,14 @@ public class SPDNetRegisterPlugin extends BotPlugin {
 
 		if (playerRepository.existsByQq(player.getQq())) {
 			Player existingPlayer = playerRepository.findByQq(player.getQq());
-			sendMsg.text("QQ号" + player.getQq() + "的账户已存在,用户名为" + existingPlayer.getName());
+			sendMsg.text("QQ号 " + player.getQq() + " 的账户已存在,用户名为 " + existingPlayer.getName());
 			bot.sendGroupMsg(event.getGroupId(), sendMsg.build(), false);
 			return MESSAGE_BLOCK;
 		}
 
 		if (playerRepository.existsByName(player.getName())) {
 			Player existingPlayer = playerRepository.findByName(player.getName());
-			sendMsg.text("用户名" + player.getName() + "的账户已存在,QQ号为" + existingPlayer.getQq());
+			sendMsg.text("用户名 " + player.getName() + " 的账户已存在,QQ号为 " + existingPlayer.getQq());
 			bot.sendGroupMsg(event.getGroupId(), sendMsg.build(), false);
 			return MESSAGE_BLOCK;
 		}

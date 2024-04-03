@@ -9,6 +9,7 @@ shiro:
     - me.catand.spdnetserver.plugins.LogPlugin
     - me.catand.spdnetserver.plugins.SPDNetRegisterPlugin
     - me.catand.spdnetserver.plugins.SPDNetOnlinePlugin
+    - me.catand.spdnetserver.plugins.SPDNetChangeNamePlugin
 spring:
   datasource:
     url: jdbc:sqlite:SPDNetData.db
