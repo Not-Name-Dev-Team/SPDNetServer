@@ -193,6 +193,7 @@ public class SocketService {
 	public void doSomething() {
 		seeds.clear();
 		seeds.put("seedFUN", getNoonTimestamp());
+		sender.sendBroadcastError(new SError("换种子了嗷"));
 		server.getAllClients().forEach(ClientOperations::disconnect);
 	}
 
