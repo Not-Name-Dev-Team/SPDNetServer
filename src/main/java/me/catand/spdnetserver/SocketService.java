@@ -2,10 +2,7 @@ package me.catand.spdnetserver;
 
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
-import com.corundumstudio.socketio.Configuration;
-import com.corundumstudio.socketio.HandshakeData;
-import com.corundumstudio.socketio.SocketIONamespace;
-import com.corundumstudio.socketio.SocketIOServer;
+import com.corundumstudio.socketio.*;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import lombok.Getter;
@@ -196,6 +193,7 @@ public class SocketService {
 	public void doSomething() {
 		seeds.clear();
 		seeds.put("seedFUN", getNoonTimestamp());
+		server.getAllClients().forEach(ClientOperations::disconnect);
 	}
 
 	private long getNoonTimestamp() {
