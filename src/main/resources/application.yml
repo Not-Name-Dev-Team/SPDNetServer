@@ -20,6 +20,6 @@ spring:
       hibernate:
         dialect: org.hibernate.community.dialect.SQLiteDialect
 spd:
-  version: 2.5.4
+  version: 3.0.2
   netVersion: 0.0.1
   motd: 欢迎  :D
