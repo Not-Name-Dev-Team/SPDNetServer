@@ -40,7 +40,7 @@ dependencies {
     implementation("org.hibernate.orm:hibernate-community-dialects:6.4.4.Final")
 
     // Fastjson
-    implementation("com.alibaba:fastjson:2.0.48")
+    implementation("com.alibaba:fastjson:2.0.57")
 
     // Socket.io
     implementation("com.corundumstudio.socketio:netty-socketio:2.0.8")
