@@ -43,7 +43,7 @@ dependencies {
     implementation("com.alibaba:fastjson:2.0.48")
 
     // Socket.io
-    implementation("com.corundumstudio.socketio:netty-socketio:2.0.8")
+    implementation("com.corundumstudio.socketio:netty-socketio:2.0.13")
 
     // email
     implementation("javax.mail:mail:1.4.7")
