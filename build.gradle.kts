@@ -37,7 +37,7 @@ dependencies {
     // Database
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.xerial:sqlite-jdbc:3.49.1.0")
-    implementation("org.hibernate.orm:hibernate-community-dialects:6.6.11.Final")
+    implementation("org.hibernate.orm:hibernate-community-dialects:7.1.5.Final")
 
     // Fastjson
     implementation("com.alibaba:fastjson:2.0.48")
